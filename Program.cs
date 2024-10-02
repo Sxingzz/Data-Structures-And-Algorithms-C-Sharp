@@ -506,14 +506,14 @@ namespace MiniMaxSum
     {
         public static void MiniMaxSum(List<int> arr)
         {
-            int sumElement = arr.Sum(x => x);
+            long sumElement = arr.Sum(x => (long) x);
             int minElement = arr.Min();
             int maxElement = arr.Max();
 
-            int sumMax = sumElement - minElement;
-            int sumMin = sumElement - maxElement;
+            long sumMax = sumElement - minElement;
+            long sumMin = sumElement - maxElement;
 
-            Console.WriteLine($"{sumMax} {sumMin}");
+            Console.WriteLine($"{sumMin} {sumMax}");
         }
     }
 
@@ -619,8 +619,8 @@ namespace TimeConversion
         {
             string period = s.Substring(s.Length - 2);
             int hour = int.Parse(s.Substring(0, 2));
-            string minutes = s.Substring(2, 2);
-            string seconds = s.Substring(4, 2);
+            string minutes = s.Substring(3, 2);
+            string seconds = s.Substring(6, 2);
 
             if (period == "PM" && hour != 12)
             {
@@ -2528,6 +2528,54 @@ namespace anppendAndDelette
 }
 #endif
 
+#if false // Squares
+namespace squares
+{
+    /// <summary> Algprithms Problem
+    /*
+    Xác định số lượng số chính phương trong một khoảng số nguyên cho trước.
+
+    Định nghĩa số chính phương:
+    một số được gọi là số chính phương khi nó có căn bậc hai là một số nguyên.
+    ví dụ: 4 = 2^2, 9 = 3^2 vậy 4 và 9 là 2 số chính phương...v...v...
+
+    Sample Input: 3 9
+    Sample Output: 2
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static int squares(int a, int b)
+        {
+            // Tính số chính phương đầu tiên lớn hơn hoặc bằng a
+            int start = (int)Math.Ceiling(Math.Sqrt(a));
+
+            // Tính số chính phương cuối cùng nhỏ hơn hoặc bằng b
+            int end = (int)Math.Floor(Math.Sqrt(b));
+
+            return Math.Max(0, end - start + 1);
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Please enter a = ");
+            int a = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter b = ");
+            int b = Convert.ToInt32(Console.ReadLine());
+
+            int result = Deploy.squares(a, b);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
 #endregion
 
 #region Algorithms Medium 1
@@ -4345,5 +4393,268 @@ namespace equalizingArrayElements
 #endregion
 
 
+
+#region Mock Test
+
+#if false // Mock Test
+namespace mockTest
+{
+    /// <summary> Mock test
+    /*
+    Đề Bài: Tìm giá trị trung vị Median
+
+    Định nghĩa:
+    - Median (Trung vị) của một dãy số là giá trị mà chia dãy số thành hai phần 
+    bằng nhau: một nửa các phần tử có giá trị nhỏ hơn trung vị, và nửa còn lại có
+    giá trị lớn hơn trung vị.
+    - Nếu dãy có số phần tử lẻ, thì median là phần tử đứng giữa sau khi dãy đã
+    được sắp xếp.
+    - Nếu dãy có số phần tử chẵn, median là trung bình của hai phần tử ở giữa sau
+    khi dãy được sắp xếp.
+
+    Sameple Input: 1 3 2 4 5    
+    Sample Output: 3
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static int findMedian(List<int> arr)
+        {
+           arr.Sort();
+           
+           int n = arr.Count;
+           int medianIndex = n / 2;
+
+           return arr[medianIndex];
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            List<int> arr = new List<int>();
+            Console.Write("Please enter n = ");
+            int n = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write($"Please enter arr[{i}]: ");
+                int element = Convert.ToInt32(Console.ReadLine());
+                arr.Add(element);
+            }
+
+            int result = Deploy.findMedian(arr);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+
+        }
+    }
+}
+#endif
+
+#endregion
+
+#region 1 Week Preparation Kit
+
+#region Day 1
+
+#if false // Plus Minus
+namespace PlusMinus
+{
+    /// <summary> Algorithms Problem
+    /*
+    cho một List có n = 5 => [1, 1, 0 , -1, -1]
+    có 2 số dương, 2 âm và 1 zero trong list
+    ta có 2 dương: 2/5 = 0,400000 ratios
+    ta có 2 âm:    2/5 = 0,400000 ratios
+    ta có 1 zero:  1/5 = 0.200000 ratios
+    in ra các tỉ lệ này: dương, âm, zero với 6 số sau dấu thập phân
+    Sample Input: n = 6 => -4 3 -9 0 4 1
+    Sample Output: 0.500000 0.333333 0.166667
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static void PlusMinus(int n, List<int> ar)
+        {
+            int positiveNumber = 0;
+            int negativeNumber = 0;
+            int zero = 0;
+
+            foreach (int i in ar)
+            {
+                if (i > 0)
+                {
+                    positiveNumber++;
+                }
+                else if (i < 0)
+                {
+                    negativeNumber++;
+                }
+                else
+                {
+                    zero++;
+                }
+            }
+
+            double positiveRatios = (double)positiveNumber / n;
+            double negativeRatios = (double)negativeNumber / n;
+            double zeroRatios = (double)zero / n;
+
+            Console.WriteLine(positiveRatios.ToString("F6"));
+            Console.WriteLine(negativeRatios.ToString("F6"));
+            Console.WriteLine(zeroRatios.ToString("F6"));
+        }
+    }
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            List<int> ar = new List<int>();
+            Console.Write("Please enter n = ");
+            int n = int.Parse(Console.ReadLine());
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write($"Please enter elements {i}: ");
+                int elements = int.Parse(Console.ReadLine());
+                ar.Add(elements);
+            }
+
+            Deploy.PlusMinus(n, ar);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Mini-MaxSum
+namespace MiniMaxSum
+{
+    /// <summary> Algorithms Problem
+    /*
+    Cho một danh sách số nguyên [1, 3, 5, 7, 9]
+    tính tổng nhỏ nhất loại bỏ phần tử lớn nhất 1 + 3 + 5 + 7 = 16
+    tính tổng lớn nhất loại bỏ phần tử bé nhất  3 + 5 + 7 + 9 = 24
+    In ra tổng bé nhất và tổng lớn nhất: 16, 24
+    Sample Input: n = 5 => 1 2 3 4 5
+    Sample Output: 10 14
+    */
+    /// </summary>
+    
+    internal class Deploy
+    {
+        public static void MiniMaxSum(List<int> arr)
+        {
+            long sumElement = arr.Sum(x => (long) x);
+            int minElement = arr.Min();
+            int maxElement = arr.Max();
+
+            long sumMax = sumElement - minElement;
+            long sumMin = sumElement - maxElement;
+
+            Console.WriteLine($"{sumMin} {sumMax}");
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            List<int> arr = new List<int>();
+
+            Console.Write("please enter n = ");
+            int n = int.Parse(Console.ReadLine());
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write($"Please enter elements {i}: ");
+                int elements = int.Parse(Console.ReadLine());
+                arr.Add(elements);
+            }
+
+            Deploy.MiniMaxSum(arr);
+
+            Console.ReadLine();
+        }
+    }
+
+}
+#endif
+
+#if false // Time Conversion
+namespace TimeConversion
+{
+    /// <summary> Algorithms Problem
+    /*
+    Cho một chuỗi s, biểu diễn thời gian hh:mm:ss:Period
+    hh là từ 1h đến 12h
+    mm là từ 00 đến 59
+    ss là từ 00 đến 59
+    Period là AM & PM
+    cần chuyển đổi này sang định dạng 24h:
+    nếu 12AM thì chuyển thành 00
+    nếu 12PM thì giữ nguyên
+    nếu là giờ AM nhưng k phải 12AM thì giữ nguyên giờ
+    nếu là giờ PM nhưng k phải 12PM thì cộng thêm 12.
+    in ra chuyển đổi định dạng từ 12h sang 24h đó?
+    Sample Input: 07:05:45PM
+    Sample Output: 19:05:45
+    */
+    /// </summary>
+    
+    internal class Deploy
+    {
+        public static string TimeConversion(string s)
+        {
+            string period = s.Substring(s.Length - 2);
+            int hour = int.Parse(s.Substring(0, 2));
+            string minutes = s.Substring(3, 2);
+            string seconds = s.Substring(6, 2);
+
+            if (period == "PM" && hour != 12)
+            {
+                hour += 12;
+            }
+            if (period == "AM" && hour == 12)
+            {
+                hour = 0;
+            }
+
+            return hour.ToString("D2") + ":" + minutes + ":" + seconds;
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Please enter time (hh:mm:ss AM/PM): ");
+            string s = Console.ReadLine();
+
+            string result = Deploy.TimeConversion(s);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+
+        }
+    }
+}
+#endif
+
+#endregion
+
+#region Day 2
+
+
+
+#endregion
+
+#endregion
 
 
