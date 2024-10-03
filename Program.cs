@@ -4396,8 +4396,8 @@ namespace equalizingArrayElements
 
 #region Mock Test
 
-#if false // Mock Test
-namespace mockTest
+#if false // Find Median
+namespace findMedian
 {
     /// <summary> Mock test
     /*
@@ -4450,6 +4450,104 @@ namespace mockTest
 
             Console.ReadLine();
 
+        }
+    }
+}
+#endif
+
+#if false // Flipping the Matrix
+namespace flippingTheMatrix
+{
+    /// <summary> Mock test
+    /*
+    Cho 1 ma trận hình vuông kích thước 2n x 2n; có nghĩa là số hàng và số cột
+    của ma trận đều là 2n, ví dụ n = 2 ma trận sẽ có 4 hàng và 4 cột.
+
+    có thể lật một phần tử của ma trận , lật ở đây là có thể chọn 1 phần tử và
+    thay thế nó bằng 1 một 4 phần tử tương ứng nằm ở các góc của ma trận.
+
+    cụ thể nếu chọn 1 phần tử tại vị trí (i, j) thì có thể lật sang:
+    Phần tử ở trên bên trái: (i, j)
+    Phần tử ở trên bên phải: (i, 2n - 1 - j)
+    Phần tử ở dưới bên trái: (2n - 1 - i, j)
+    Phần tử ở dưới bên phải: (2n - 1 - i, 2n - 1 - j)
+
+    Mục tiêu cuối cùng là tìm tổng giá trị lớn nhất có thể của các phần tử
+    trong nửa trên của ma trận sau khi bạn có thể lật các phần tử bất kỳ.
+
+    chỉ cần xem xét nửa trên của ma trận, vì có thể chọn lật bất 
+    kỳ phần tử nào từ nửa dưới sang nửa trên để tối đa hóa tổng.
+
+    Sameple Input:    112 42 83 119
+                      56  125 56 49
+                      15  78 101 43
+                      62  98 114 108
+
+    lần lặp 1 (i = 0, j = 0): [112, 119, 62, 108] => 119
+    lần lặp 2 (i = 0, j = 1): [42, 83, 98, 114] => 114
+    lần lặp 3 (i = 1, j = 0): [56, 49, 15, 43] => 56
+    lần lặp 4 (i = 1, j = 1): [125, 56, 78, 101] => 125
+    119 + 114 + 56 + 125 = 414
+
+    Sample Output: 414
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static int flippingMatrix(List<List<int>> maxtrix)
+        {
+            int n = maxtrix.Count / 2; // lấy nữa ma trận
+            int totalMax = 0;
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    int topLeft = maxtrix[i][j];
+                    int topRight = maxtrix[i][2 * n - 1 - j];
+                    int bottomLeft = maxtrix[2 * n - 1 - i][j];
+                    int bottomRight = maxtrix[2 * n - 1 - i][2 * n - 1 - j];
+
+                    int maxValue = Math.Max(topLeft, Math.Max(topRight, Math.
+                                                   Max(bottomLeft, bottomRight)));
+                    totalMax += maxValue;
+                }
+            }
+
+            return totalMax;
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            var matrix = new List<List<int>>();
+
+            Console.Write("Please enter nRow = ");
+            int nRow = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter nColumn = ");
+            int nCol = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < nRow; i++)
+            {
+                var row = new List<int>();
+
+                for (int j = 0; j < nCol; j++)
+                {
+                    Console.Write($"Please enter value row{i} column{j}: ");
+                    int element = Convert.ToInt32(Console.ReadLine());
+                    row.Add(element);
+                }
+
+                matrix.Add(row);
+            }
+
+            int result = Deploy.flippingMatrix(matrix);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
         }
     }
 }
@@ -4651,7 +4749,181 @@ namespace TimeConversion
 
 #region Day 2
 
+#if false // Lonely Interger
+namespace lonelyInterger
+{
+    /// <summary> Algorithms Problem
+    /*
+    Cho 1 danh sách các số nguyên trong đó, tất cả các số đều xuất hiện 2 lần
+    chỉ có 1 số xuất hiện 1 lần duy nhất, tìm và in ra số đó
 
+    Sanple Input: [1 2 3 4 3 2 1]
+    sample Output: 4
+    */
+    /// 
+
+    internal class Deploy
+    {
+        public static int lonelyInterger(List<int> a)
+        {
+            int result = 0;
+
+            foreach (int num in a)
+            {
+                result ^= num; // XOR các phần tử
+            }
+
+            return result;
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            List<int> a = new List<int>();
+            Console.Write("Please enter n: ");
+            int n = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0;i < n; i++)
+            {
+                Console.Write($"Please enter elements {i}: ");
+                int element = Convert.ToInt32(Console.ReadLine());
+                a.Add(element);
+            }
+
+            int result = Deploy.lonelyInterger(a);
+            Console.WriteLine($"Lonely Interger: {result}");
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Diagonal Difference (List<List<int>>)
+namespace DiagonalDifference
+{
+    /// <summary> Algorithms Problem
+    /*
+    cho một List 2 chiều n = 3 => 1 2 3
+                                  4 5 6
+                                  7 8 9
+    tính tổng 2 đường chéo 1 + 5 + 9 = a và 3 + 5 + 7 = b
+    in ra c = a - b
+    Sample Input: n = 3 => 11 2 4
+                           4  5 6
+                           10 8 -12
+    Sample Output: 15
+    */
+    /// </summary>
+    
+    internal class Deploy
+    {
+        public static int DiagonalDifference(List<List<int>> arr)
+        {
+            int primaryDiagonal = 0;
+            int secondaryDiagonal = 0;
+
+            for (int i = 0; i < arr.Count; i++)
+            {
+                primaryDiagonal += arr[i][i];
+                secondaryDiagonal += arr[i][arr.Count - i - 1];
+            }
+
+            return Math.Abs(primaryDiagonal - secondaryDiagonal);
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            List<List<int>> arr = new List<List<int>>();
+
+            Console.Write("Please enter nRow = ");
+            int nRows = int.Parse(Console.ReadLine());
+            Console.Write("Please enter nColums = ");
+            int nColumns = int.Parse(Console.ReadLine());
+
+            for (int i = 0;i < nRows; i++)
+            {
+                List<int> row = new List<int>();
+                for (int j = 0;j < nColumns; j++)
+                {
+                    Console.Write($"Please enter elements rows {i}, Columns {j}: ");
+                    int elements = int.Parse(Console.ReadLine());
+                    row.Add(elements);
+                }
+                arr.Add(row);
+            }
+
+            int result = Deploy.DiagonalDifference(arr);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Counting Sort
+namespace countingSort
+{
+    /// <summary> Algorithms Problem
+    /*
+    Cho 1 danh sách các số nguyên, trả về số lần xuất hiện của mổi số trong
+    danh sách. Danh sách này chỉ chứa các số nguyên nằm trong khoảng từ 0 đến 99.
+
+    Đầu ra Một danh sách (mảng) có 100 phần tử, trong đó mỗi phần tử tại chỉ số i
+    sẽ là số lần mà số i xuất hiện trong danh sách đầu vào.
+
+    Sameple Input: [1, 4, 1, 2, 7, 5, 2]
+    Sampe Output: [2, 1, 2, 2, 1, 1, 2]
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static List<int> countingSort(List<int> arr)
+        {
+            
+            List<int> count = new List<int>(new int[100]);
+             
+            foreach (int num in arr)
+            {
+                count[num]++;
+            }
+
+            return count;
+
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            var arr = new List<int>();
+            Console.Write("Please enter n = ");
+            int n = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < n ; i++)
+            {
+                Console.Write($"Please enter element {i}: ");
+                int element = Convert.ToInt32(Console.ReadLine());
+                arr.Add(element);
+            }
+
+            var result = Deploy.countingSort(arr);
+            Console.WriteLine($"Sorted Array: {string.Join(" ", result)}");
+
+            Console.ReadLine();
+        }
+    }
+
+}
+#endif
 
 #endregion
 
