@@ -4927,6 +4927,81 @@ namespace countingSort
 
 #endregion
 
+#region Day 3
+
+#if false // Zig Zag Sequence
+namespace zigZagSequence
+{
+    /// <summary> Algorithms Problem
+    /*
+    Biến đổi một dãy số được sắp xếp thành một chuỗi có dạng ZigZag, tức là đầu tiên
+    các số nhỏ dần sau đó các số lớn dần.
+
+    Sanple Input: [1, 2, 3, 4, 5, 6, 7]
+    sample Output: [1, 2, 3, 7, 6, 5, 4]
+    */
+    /// 
+
+    internal class Deploy
+    {
+        public static int[] ZigZagSequence(int[] arr)
+        { 
+            Array.Sort(arr);
+
+            int n = arr.Length;
+            int mid = n / 2;
+
+            // Tạo danh sách cho phần đầu và phần lớn
+            List<int> result = new List<int>();
+
+            // Thêm các phần tử nhỏ hơn hoặc bằng phần tử giữa
+            for (int i = 0; i < mid; i++)
+            {
+                result.Add(arr[i]);
+            }
+
+            result.Add(arr[n - 1]);
+
+            // Thêm các phần tử lớn hơn phần tử giữa nhưng ngược lại
+            for (int i = n - 2; i >= mid; i--)
+            {
+                result.Add(arr[i]);
+            }
+
+            return result.ToArray();
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Please enter n = ");
+            int n = Convert.ToInt32(Console.ReadLine());
+
+            int[] arr = new int[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write($"Please enter element {i}: ");
+                int element = Convert.ToInt32(Console.ReadLine());
+                arr[i] = element;
+            }
+
+            int[] result = Deploy.ZigZagSequence(arr);
+            Console.WriteLine(string.Join(" ", result));
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+
+
+
+#endregion
+
 #endregion
 
 
