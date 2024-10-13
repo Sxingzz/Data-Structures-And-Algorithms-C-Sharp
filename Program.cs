@@ -4553,6 +4553,81 @@ namespace flippingTheMatrix
 }
 #endif
 
+#if false // Palindrome Index
+namespace palindromeIndex
+{
+    /// <summary> Mock test
+    /*
+    Bài toán yêu cầu tìm chỉ số của một ký tự trong chuỗi mà khi loại bỏ ký tự đó,
+    chuỗi còn lại sẽ trở thành palindrome. Nếu chuỗi đã là palindrome,
+    kết quả trả về là -1.
+
+    Palindrome là chuỗi mà khi đảo ngược vẫn giống hệt chuỗi ban đầu.
+    Ví dụ: "madam", "racecar", "121" là palindrome.
+    Với chuỗi không phải palindrome, nếu loại bỏ một ký tự có thể biến chuỗi
+    thành palindrome, ta phải tìm chỉ số của ký tự đó.
+
+    in ra chỉ số của ký tự cần loại bỏ.
+
+    Sameple Input: aaab 
+    Sample Output: 3 vì aaa là palindrome nên loại bỏ b, b ở vị trí thứ 3.
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static int palindromeIndex(string s)
+        {
+            int n = s.Length;
+
+            // Hàm kiểm tra xem một chuỗi có phải palindrome không
+            bool IsPalindrome(string str, int start, int end)
+            {
+                while (start < end)
+                {
+                    if (str[start] != str[end])
+                        return false;
+                    start++;
+                    end--;
+                }
+
+                return true;
+            }
+
+            // Duyệt từ đầu tới giữa chuỗi
+            for (int i = 0; i < n / 2; i++)
+            {
+                if (s[i] != s[n - 1 - i])
+                {
+                    // Kiểm tra nếu bỏ ký tự tại vị trí i hoặc n-1-i
+                    // có tạo ra palindrome không
+                    if (IsPalindrome(s, i + 1, n - 1 - i))
+                        return i;
+                    if (IsPalindrome(s, i, n - 2 - i))
+                        return n - 1 - i;
+                }
+            }
+
+            return -1;
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Please enter string: ");
+            string s = Console.ReadLine();
+
+            int result = Deploy.palindromeIndex(s);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
 #endregion
 
 #region 1 Week Preparation Kit
@@ -4997,8 +5072,143 @@ namespace zigZagSequence
 }
 #endif
 
+#if false // Tower Breakers
+namespace towerBreakers
+{
+    /// <summary> Algorithms Problem
+    /*
+    Cho n tháp và mỗi tháp ban đầu có chiều cao m. nhận vào input n và m xác định
+    Hai người chơi, Player 1 và Player 2, luân phiên nhau thực hiện các bước đi.
+    Tại mỗi bước, người chơi chọn một tháp bất kỳ có chiều cao lớn hơn 1,
+    và giảm chiều cao của nó xuống thành một số nhỏ hơn, 
+    nhưng phải là ước của chiều cao hiện tại.
+    ví dụ, nếu tháp có chiều cao 6, người chơi có thể giảm xuống 3 hoặc 2, 
+    vì 6 chia hết cho 3 và 2).
+
+    Người chơi không thể thực hiện nước đi nào nếu tất cả các tháp có chiều cao bằng 1.
+    Người chơi không thể di chuyển sẽ thua cuộc.
+
+    Quy tắc xác định người thắng:
+    Nếu m = 1, Player 2 luôn thắng vì Player 1 không có nước đi nào.
+    Nếu n là chẵn và m > 1, Player 2 thắng bằng chiến lược phản chiếu.
+    Nếu n là lẻ và m > 1, Player 1 thắng vì Player 1 có thể dẫn dắt trò chơi 
+    theo cách có lợi.
+
+    Sanple Input: n = 2, m = 2
+    sample Output: 2
+    */
+    /// 
+
+    internal class Deploy
+    {
+        public static int towerBreakers(int n, int m)
+        { 
+            if (m == 1)
+            {
+                return 2;
+            }
+
+            if (n % 2 == 0)
+            {
+                return 2;
+            }
+            return 1;
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Please enter n = ");
+            int n = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter m = ");
+            int m = Convert.ToInt32(Console.ReadLine());
+
+            int result = Deploy.towerBreakers(n, m);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Caesar Cipher
+namespace caesarCipher
+{
+    /// <summary> Algorithms Problem
+    /*
+    Thuật toán Caesar Cipher là một dạng mã hóa cổ điển trong mật mã học,
+    được Julius Caesar sử dụng để bảo mật thông tin.
+    Thuật toán này hoạt động bằng cách thay thế mỗi ký tự trong một chuỗi
+    bằng ký tự khác nằm cách nó một khoảng xác định trong bảng chữ cái.
+
+    Chuỗi s là đầu vào cần mã hóa.
+    k là một số nguyên, đại diện cho số lần dịch chuyển ký tự trong bảng chữ cái.
+    Nếu k > 26, ta lấy k % 26 vì bảng chữ cái chỉ có 26 ký tự.
+    Các ký tự chữ cái sẽ được dịch chuyển theo số k vị trí trong bảng chữ cái.
+    Các ký tự khác (số, ký hiệu) không thay đổi.
+
+    Nếu ký tự là chữ cái viết thường (a-z):
+    newChar = (currentChar - 'a' + k) % 26 + 'a'
+    Nếu ký tự là chữ cái viết hoa (A-Z):
+    newChar = (currentChar - 'A' + k) % 26 + 'A'
 
 
+    Sanple Input: s = middle-Outz, k = 2
+    sample Output: okffng-Qwvb
+    */
+    /// 
+
+    internal class Deploy
+    {
+        public static string caesarCipher(string s, int k)
+        {
+            // Đảm bảo rằng k không lớn hơn 26 
+            k = k % 26;
+
+            StringBuilder result = new StringBuilder();
+
+            foreach (char c in s)
+            {
+                if (char.IsLower(c))
+                {
+                    char newChar = (char)((c - 'a' + k) % 26 + 'a');
+                    result.Append(newChar);
+                }
+                else if (char.IsUpper(c))
+                {
+                    char newChar = (char)((c - 'A' + k) % 26 + 'A'); 
+                    result.Append(newChar);
+                }
+                else
+                {
+                    result.Append(c);
+                }
+            }
+
+            return result.ToString();
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Please enter s = ");
+            string s = Console.ReadLine();
+            Console.Write("Please enter k = ");
+            int k = Convert.ToInt32(Console.ReadLine());
+
+            string result = Deploy.caesarCipher(s, k);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
 
 #endregion
 
