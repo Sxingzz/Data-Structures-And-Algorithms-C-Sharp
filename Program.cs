@@ -16,6 +16,7 @@ using System.Numerics;
 #region Self-written library
 
 using LinkedList.SinLinkedList;
+using System.Net;
 
 namespace LinkedList
 {
@@ -2576,6 +2577,179 @@ namespace squares
 }
 #endif
 
+#if false // Library Fine
+namespace libraryFine
+{
+    /// <summary> Algprithms Problem
+    /*
+    tính toán tiền phạt trả sách muộn cho một thư viện dựa trên ngày trả dự kiến và 
+    ngày trả thực tế. 
+
+    Ta có hai ngày:
+    - Ngày trả sách thực tế: d1 (ngày), m1 (tháng), y1 (năm)
+    - Ngày trả sách dự kiến: d2 (ngày), m2 (tháng), y2 (năm)
+
+    Mức phạt được tính theo các quy tắc sau:
+    - Nếu sách được trả đúng hạn hoặc trước ngày trả dự kiến (tức là y1 < y2, 
+    hoặc y1 == y2 và m1 < m2, hoặc y1 == y2 và m1 == m2 và d1 <= d2): Không có phạt (trả về 0).
+    - Nếu sách được trả muộn trong cùng một tháng và cùng một năm: 
+    Tiền phạt là 15 Hackos cho mỗi ngày muộn: (d1 - d2) * 15.
+    - Nếu sách được trả muộn trong cùng một năm nhưng khác tháng:
+    Tiền phạt là 500 Hackos cho mỗi tháng muộn: (m1 - m2) * 500.
+    - Nếu sách được trả muộn sau năm dự kiến: Tiền phạt là 10,000 Hackos.
+
+
+    Sample Input:  d1 = 9, m1 = 6, y1 = 2015, d2 = 6, m2 = 6, y2 = 2015
+    Sample Output: 45
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static int libraryFine(int d1, int m1, int y1, int d2, int m2, int y2)
+        {
+            // Nếu năm trả sách lớn hơn năm dự kiến
+            if (y1 > y2)
+            {
+                return 10000; // Tiền phạt là 10,000 Hackos.
+            }
+            // Nếu năm trả sách nhỏ hơn năm dự kiến, không có phạt
+            if (y1 < y2)
+            {
+                return 0;
+            }
+            // Nếu năm trả sách bằng năm dự kiến
+            else
+            {
+                // Nếu tháng trả sách lớn hơn tháng dự kiến
+                if (m1 > m2)
+                {
+                    return (m1 - m2) * 500;
+                }
+                else if (m1 < m2)
+                {
+                    return 0;
+                }
+                // Nếu tháng và năm trả sách bằng nhau
+                else
+                {
+                    // Nếu ngày trả sách lớn hơn ngày dự kiến
+                    if (d1 > d2)
+                    {
+                        return (d1 - d2) * 15;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+            }
+
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Please enter d1: ");
+            int d1 = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter m1: ");
+            int m1 = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter y1: ");
+            int y1 = Convert.ToInt32(Console.ReadLine());
+
+            Console.Write("Please enter d2: ");
+            int d2 = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter m2: ");
+            int m2 = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter y2: ");
+            int y2 = Convert.ToInt32(Console.ReadLine());
+
+            int result = Deploy.libraryFine(d1, m1, y1, d2, m2, y2);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Cut the Sticks
+namespace cutTheSticks
+{
+    /// <summary> Algprithms Problem
+    /*
+    cắt bỏ các phần tử có độ dài nhỏ nhất từ danh sách các que và tiếp tục cắt
+    cho đến khi không còn que nào nữa.
+
+    Cho một mảng chứa các số nguyên dương, mỗi số đại diện cho chiều dài của một que.
+
+    Giả sử danh sách ban đầu là [5, 4, 4, 2, 2, 8].
+    Bước 1: Danh sách ban đầu có 6 que. Ta thêm số 6 vào danh sách kết quả.
+    Bước 2: Cắt độ dài nhỏ nhất là 2: Danh sách sau khi cắt: [3, 2, 2, 0, 0, 6] 
+    (loại bỏ 0). Còn lại 4 que. Thêm số 4 vào danh sách kết quả.
+    Bước 3: Cắt độ dài nhỏ nhất là 2: Danh sách sau khi cắt: [1, 0, 0, 0] (loại bỏ 0).
+    Còn lại 3 que. Thêm số 3 vào danh sách kết quả.
+    Bước 4: Cắt độ dài nhỏ nhất là 1: Danh sách sau khi cắt: [0, 0, 0].
+    Còn lại 1 que. Thêm số 1 vào danh sách kết quả.
+
+    Kết quả cuối cùng là [6, 4, 2, 1].
+
+    Sample Input:  [5, 4, 4, 2, 2, 8]
+    Sample Output: [6, 4, 2, 1]
+    */
+    /// </summary> 
+
+    internal class Deploy
+    {
+        public static List<int> cutTheSticks(List<int> arr)
+        {
+            List<int> result = new List<int>();
+
+            while(arr.Count > 0)
+            {
+                result.Add(arr.Count);
+
+                int minValue = arr.Min();
+
+                arr = arr.Select(x => x - minValue).Where(x => x > 0).ToList();
+            }
+
+            return result;
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            List<int> arr = new List<int>();
+            Console.Write("Please enter n = ");
+            int n = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write($"Please eneter element {i}: ");
+                int element = Convert.ToInt32(Console.ReadLine());
+                arr.Add(element);
+            }
+
+            var result = Deploy.cutTheSticks(arr);
+            Console.WriteLine(string.Join(", ", result));
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#endregion
+
+#region Algorithms Easy 5
+
+
+
 #endregion
 
 #region Algorithms Medium 1
@@ -2867,6 +3041,86 @@ namespace extraLongFactorials
             int n = Convert.ToInt32(Console.ReadLine());
 
             Deploy.extraLongFactorials(n);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Non-Divisible Subset
+namespace NonDivisibleSubset
+{
+    /// <summary> Algprithms Problem
+    /*
+    tìm tập hợp con lớn nhất trong một danh sách các số nguyên sao cho không có cặp nào
+    trong tập hợp đó có tổng chia hết cho một số nguyên k nhất định.
+
+    Cho một danh sách các số nguyên và một số nguyên k, tìm tập hợp con lớn nhất 
+    từ danh sách đó sao cho không có cặp nào trong tập hợp con có tổng chia hết cho k.
+
+    trả về kích thước của tập hợp con lớn nhất mà k có tổng chia hết cho 3
+
+    Sample Input: S = [1, 7, 2, 4]
+    Sample Output: 3
+    */
+    /// </summary> 
+
+    internal class Deploy
+    {
+        public static int nonDivisibleSubset(int k, List<int> s)
+        {
+            // Tạo mảng đếm với kích thước k
+            int[] count = new int[k];
+
+            // Đếm các số theo mod k
+            foreach (int number in s)
+            {
+                count[number % k]++; // Tăng số lượng phần tử theo mod k
+            }
+
+            // Khởi tạo kích thước của tập hợp không chia hết
+            int result = Math.Min(count[0], 1);
+
+            for (int i = 1; i <= k / 2; i++)
+            {
+                if (i != k - i) // Kiểm tra không phải là k/2
+                {
+                    result += Math.Max(count[i], count[k - i]);
+                }
+            }
+
+            // Nếu k là số chẵn, thêm một phần tử k/2
+            if (k % 2 == 0)
+            {
+                result++;
+            }
+
+            return result;
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            var s = new List<int>();
+
+            Console.Write("Please enter n = ");
+            int n = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write($"Please enter element {i}: ");
+                int element = Convert.ToInt32(Console.ReadLine());
+                s.Add(element);
+            }
+
+            Console.Write("Please enter k = ");
+            int k = Convert.ToInt32(Console.ReadLine());
+
+            int result = Deploy.nonDivisibleSubset(k , s);
+            Console.WriteLine(result);
 
             Console.ReadLine();
         }
@@ -3816,6 +4070,143 @@ namespace mergeTwoSortedLists
 }
 #endif
 
+#if false // Get Node Value
+namespace getNodeValue
+{
+    /// <summary> Data Structures
+    /*
+    lấy giá trị của một nút trong danh sách liên kết đơn (Singly Linked List), 
+    dựa trên vị trí tính từ cuối danh sách, Điều này có nghĩa là thay vì đếm
+    từ đầu danh sách, ta cần đếm từ đuôi danh sách về đầu.
+
+    Ta có một danh sách liên kết đơn (Singly Linked List) và một vị trí
+    positionFromTail tính từ đuôi. Nhiệm vụ là tìm giá trị của nút tại vị trí đó.
+
+    Sample Input: nNode = 3 => 3 -> 2 -> 1 -> null, 
+                  positionFromTail = 2.   
+    Sample Output: 3
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static int getNode(SinglyLinkedListNode llist,int positionFromTail)
+        {
+            // Đếm số lượng phần tử trong danh sách liên kết
+            int length = 0;
+            SinglyLinkedListNode current = llist;
+
+            while (current != null)
+            {
+                length++;
+                current = current.next;
+            }
+
+            // xác định vị trí từ đầu danh sách (indexFromHead)
+            int indexFromHead = length - positionFromTail - 1;
+
+            // Duyệt lại danh sách để lấy giá trị tại vị trí đó
+            current = llist;
+            for (int i = 0; i < indexFromHead; i++)
+            {
+                current = current.next;
+            }
+
+            return current.data;
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            SinglyLinkedList linkedList = new SinglyLinkedList();
+
+            Console.Write("Please enter nNode = ");
+            int nNode = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < nNode; i++)
+            {
+                Console.Write($"Please enter value Node {i}: ");
+                int nodeData = Convert.ToInt32(Console.ReadLine());
+                linkedList.InsertNode(nodeData);
+            }
+
+            Console.Write("Please enter positionFromTail = ");
+            int positionFromTail = Convert.ToInt32(Console.ReadLine());
+
+            int nodeValue = Deploy.getNode(linkedList.head, positionFromTail);
+            Console.WriteLine(nodeValue);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Delete Duplicate-value from a sorted linked list
+namespace deleteDuplicateValueFromASortedLinkedList
+{
+    /// <summary> Data Structures
+    /*
+    yêu cầu loại bỏ tất cả các giá trị trùng lặp trong Singly Linked List
+    sao cho mỗi giá trị chỉ xuất hiện một lần. 
+
+    Sample Input: nNode = 5 => 1 -> 2 -> 2 -> 3 -> 4 -> null,      
+    Sample Output: 1 -> 2 -> 3 -> 4 -> null
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static SinglyLinkedListNode removeDuplicates(
+                                                       SinglyLinkedListNode llist)
+        {
+            if (llist == null || llist.next == null)
+            {
+                return llist;
+            }
+
+            SinglyLinkedListNode current = llist;
+
+            while (current != null)
+            {
+                while(current.next != null && current.data == current.next.data)
+                {
+                    current.next = current.next.next; // Bỏ qua nút trùng lặp
+                }
+
+                current = current.next;
+            }
+
+            return llist;
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            SinglyLinkedList SinLinkedList = new SinglyLinkedList();
+            Console.Write("Please enter nNode = ");
+            int nNode = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < nNode; i++)
+            {
+                Console.Write($"Please enter Node value {i}: ");
+                int NodeValue = Convert.ToInt32(Console.ReadLine());
+                SinLinkedList.InsertNode(NodeValue);
+            }
+
+            var result = Deploy.removeDuplicates(SinLinkedList.head);
+            SinglyLinkedList.PrintSinglyLinkedList(result, " -> ");
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
 #endregion
 
 #region Data Structures Medium 1
@@ -4394,241 +4785,7 @@ namespace equalizingArrayElements
 
 
 
-#region Mock Test
 
-#if false // Find Median
-namespace findMedian
-{
-    /// <summary> Mock test
-    /*
-    Đề Bài: Tìm giá trị trung vị Median
-
-    Định nghĩa:
-    - Median (Trung vị) của một dãy số là giá trị mà chia dãy số thành hai phần 
-    bằng nhau: một nửa các phần tử có giá trị nhỏ hơn trung vị, và nửa còn lại có
-    giá trị lớn hơn trung vị.
-    - Nếu dãy có số phần tử lẻ, thì median là phần tử đứng giữa sau khi dãy đã
-    được sắp xếp.
-    - Nếu dãy có số phần tử chẵn, median là trung bình của hai phần tử ở giữa sau
-    khi dãy được sắp xếp.
-
-    Sameple Input: 1 3 2 4 5    
-    Sample Output: 3
-    */
-    /// </summary>
-
-    internal class Deploy
-    {
-        public static int findMedian(List<int> arr)
-        {
-           arr.Sort();
-           
-           int n = arr.Count;
-           int medianIndex = n / 2;
-
-           return arr[medianIndex];
-        }
-    }
-
-    internal class Problem
-    {
-        static void Main(string[] args)
-        {
-            List<int> arr = new List<int>();
-            Console.Write("Please enter n = ");
-            int n = Convert.ToInt32(Console.ReadLine());
-
-            for (int i = 0; i < n; i++)
-            {
-                Console.Write($"Please enter arr[{i}]: ");
-                int element = Convert.ToInt32(Console.ReadLine());
-                arr.Add(element);
-            }
-
-            int result = Deploy.findMedian(arr);
-            Console.WriteLine(result);
-
-            Console.ReadLine();
-
-        }
-    }
-}
-#endif
-
-#if false // Flipping the Matrix
-namespace flippingTheMatrix
-{
-    /// <summary> Mock test
-    /*
-    Cho 1 ma trận hình vuông kích thước 2n x 2n; có nghĩa là số hàng và số cột
-    của ma trận đều là 2n, ví dụ n = 2 ma trận sẽ có 4 hàng và 4 cột.
-
-    có thể lật một phần tử của ma trận , lật ở đây là có thể chọn 1 phần tử và
-    thay thế nó bằng 1 một 4 phần tử tương ứng nằm ở các góc của ma trận.
-
-    cụ thể nếu chọn 1 phần tử tại vị trí (i, j) thì có thể lật sang:
-    Phần tử ở trên bên trái: (i, j)
-    Phần tử ở trên bên phải: (i, 2n - 1 - j)
-    Phần tử ở dưới bên trái: (2n - 1 - i, j)
-    Phần tử ở dưới bên phải: (2n - 1 - i, 2n - 1 - j)
-
-    Mục tiêu cuối cùng là tìm tổng giá trị lớn nhất có thể của các phần tử
-    trong nửa trên của ma trận sau khi bạn có thể lật các phần tử bất kỳ.
-
-    chỉ cần xem xét nửa trên của ma trận, vì có thể chọn lật bất 
-    kỳ phần tử nào từ nửa dưới sang nửa trên để tối đa hóa tổng.
-
-    Sameple Input:    112 42 83 119
-                      56  125 56 49
-                      15  78 101 43
-                      62  98 114 108
-
-    lần lặp 1 (i = 0, j = 0): [112, 119, 62, 108] => 119
-    lần lặp 2 (i = 0, j = 1): [42, 83, 98, 114] => 114
-    lần lặp 3 (i = 1, j = 0): [56, 49, 15, 43] => 56
-    lần lặp 4 (i = 1, j = 1): [125, 56, 78, 101] => 125
-    119 + 114 + 56 + 125 = 414
-
-    Sample Output: 414
-    */
-    /// </summary>
-
-    internal class Deploy
-    {
-        public static int flippingMatrix(List<List<int>> maxtrix)
-        {
-            int n = maxtrix.Count / 2; // lấy nữa ma trận
-            int totalMax = 0;
-
-            for (int i = 0; i < n; i++)
-            {
-                for (int j = 0; j < n; j++)
-                {
-                    int topLeft = maxtrix[i][j];
-                    int topRight = maxtrix[i][2 * n - 1 - j];
-                    int bottomLeft = maxtrix[2 * n - 1 - i][j];
-                    int bottomRight = maxtrix[2 * n - 1 - i][2 * n - 1 - j];
-
-                    int maxValue = Math.Max(topLeft, Math.Max(topRight, Math.
-                                                   Max(bottomLeft, bottomRight)));
-                    totalMax += maxValue;
-                }
-            }
-
-            return totalMax;
-        }
-    }
-
-    internal class Problem
-    {
-        static void Main(string[] args)
-        {
-            var matrix = new List<List<int>>();
-
-            Console.Write("Please enter nRow = ");
-            int nRow = Convert.ToInt32(Console.ReadLine());
-            Console.Write("Please enter nColumn = ");
-            int nCol = Convert.ToInt32(Console.ReadLine());
-
-            for (int i = 0; i < nRow; i++)
-            {
-                var row = new List<int>();
-
-                for (int j = 0; j < nCol; j++)
-                {
-                    Console.Write($"Please enter value row{i} column{j}: ");
-                    int element = Convert.ToInt32(Console.ReadLine());
-                    row.Add(element);
-                }
-
-                matrix.Add(row);
-            }
-
-            int result = Deploy.flippingMatrix(matrix);
-            Console.WriteLine(result);
-
-            Console.ReadLine();
-        }
-    }
-}
-#endif
-
-#if false // Palindrome Index
-namespace palindromeIndex
-{
-    /// <summary> Mock test
-    /*
-    Bài toán yêu cầu tìm chỉ số của một ký tự trong chuỗi mà khi loại bỏ ký tự đó,
-    chuỗi còn lại sẽ trở thành palindrome. Nếu chuỗi đã là palindrome,
-    kết quả trả về là -1.
-
-    Palindrome là chuỗi mà khi đảo ngược vẫn giống hệt chuỗi ban đầu.
-    Ví dụ: "madam", "racecar", "121" là palindrome.
-    Với chuỗi không phải palindrome, nếu loại bỏ một ký tự có thể biến chuỗi
-    thành palindrome, ta phải tìm chỉ số của ký tự đó.
-
-    in ra chỉ số của ký tự cần loại bỏ.
-
-    Sameple Input: aaab 
-    Sample Output: 3 vì aaa là palindrome nên loại bỏ b, b ở vị trí thứ 3.
-    */
-    /// </summary>
-
-    internal class Deploy
-    {
-        public static int palindromeIndex(string s)
-        {
-            int n = s.Length;
-
-            // Hàm kiểm tra xem một chuỗi có phải palindrome không
-            bool IsPalindrome(string str, int start, int end)
-            {
-                while (start < end)
-                {
-                    if (str[start] != str[end])
-                        return false;
-                    start++;
-                    end--;
-                }
-
-                return true;
-            }
-
-            // Duyệt từ đầu tới giữa chuỗi
-            for (int i = 0; i < n / 2; i++)
-            {
-                if (s[i] != s[n - 1 - i])
-                {
-                    // Kiểm tra nếu bỏ ký tự tại vị trí i hoặc n-1-i
-                    // có tạo ra palindrome không
-                    if (IsPalindrome(s, i + 1, n - 1 - i))
-                        return i;
-                    if (IsPalindrome(s, i, n - 2 - i))
-                        return n - 1 - i;
-                }
-            }
-
-            return -1;
-        }
-    }
-
-    internal class Problem
-    {
-        static void Main(string[] args)
-        {
-            Console.Write("Please enter string: ");
-            string s = Console.ReadLine();
-
-            int result = Deploy.palindromeIndex(s);
-            Console.WriteLine(result);
-
-            Console.ReadLine();
-        }
-    }
-}
-#endif
-
-#endregion
 
 #region 1 Week Preparation Kit
 
@@ -5211,6 +5368,691 @@ namespace caesarCipher
 #endif
 
 #endregion
+
+#region Day 4
+
+#if false // Grid Challenge (List<string>)
+namespace gridChallenge
+{
+    /// <summary> Algorithms Problem
+    /*
+    Cho một lưới các ký tự, mỗi hàng trong lưới là một chuỗi ký tự.
+
+    - Sắp xếp từng hàng của lưới theo thứ tự chữ cái tăng dần (sắp xếp từ 'a' đến 'z').
+    - Sau khi sắp xếp từng hàng, kiểm tra mỗi cột của lưới xem có được sắp xếp theo
+    thứ tự chữ cái tăng dần không.
+    - Nếu tất cả các cột đều thỏa mãn điều kiện tăng dần, trả về "YES",
+    Nếu có cột nào không thỏa mãn, trả về "NO".
+
+    Sanple Input:  n = 5     ebacd
+                             fghij
+                             olmkn
+                             trpqs
+                             xywuv
+
+    sample Output: YES
+    */
+    /// 
+
+    internal class Deploy
+    {
+        public static string gridChallenge(List<string> grid)
+        {
+            // Sắp xếp từng hàng của lưới theo thứ tự chữ cái tăng dần
+            for (int i = 0; i < grid.Count; i++)
+            {
+                char[] sortedRow = grid[i].ToCharArray();
+                Array.Sort(sortedRow);
+                grid[i] = new string(sortedRow);
+            }
+
+            // Kiểm tra từng cột xem có được sắp xếp theo thứ tự tăng dần hay không
+            for (int col = 0; col < grid[0].Length; col++)
+            {
+                for (int row = 1; row < grid.Count; row++)
+                {
+                    if (grid[row][col] < grid[row - 1][col])
+                    {
+                        return "NO";
+                    }
+                }
+            }
+
+            return "YES";
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Please enter the number of rows (n) = ");
+            int n = Convert.ToInt32(Console.ReadLine());
+
+            List<string> grid = new List<string>();
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write($"Please enter row {i} = ");
+                grid.Add(Console.ReadLine());
+            }
+
+            string result = Deploy.gridChallenge(grid);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Recursive Digit Sum (đệ quy)
+namespace recursiveDigitSum
+{
+    /// <summary> Algorithms Problem
+    /*
+    tính toán một "siêu chữ số" dựa trên một số lớn ban đầu.
+
+    Cho một số nguyên dưới dạng chuỗi ký tự n và một số nguyên k.
+    - Lặp lại chuỗi n thành một chuỗi mới với độ dài bằng n được lặp lại k lần.
+    - Tính tổng các chữ số của chuỗi kết quả đó.
+    - Nếu tổng các chữ số có nhiều hơn một chữ số, lặp lại quá trình tính tổng
+    các chữ số cho đến khi chỉ còn một chữ số duy nhất.
+    - Trả về chữ số cuối cùng này, gọi là "super digit".
+
+    ví dụ: n = 148, k = 3 tức là ta sẽ lặp lại chuỗi "148" ba lần, 
+    tạo thành chuỗi "148148148", Thay vì lặp lại chuỗi, 
+    ta có thể tính tổng các chữ số của "148": 1 + 4 + 8 = 13.
+    Sau đó, nhân tổng này với k: 13 * 3 = 39.
+    Tính tổng các chữ số của 39: 3 + 9 = 12.
+    Tính tiếp tổng các chữ số của 12: 1 + 2 = 3
+    Vậy, "super digit" là 3.
+
+    Sanple Input: n = 148, k = 3
+    sample Output: 3
+    */
+    /// 
+
+    internal class Deploy
+    {
+        public static int superDigit(string n, int k)
+        {
+            // Tính tổng các chữ số của chuỗi n
+            long digitSum = n.ToCharArray().Select(c => (int)
+                                                   char.GetNumericValue(c)).Sum();
+            // Tổng cần tính là digitSum nhân với k
+            long totalSum = digitSum * k;
+
+            // Gọi hàm đệ quy để tính "super digit"
+            return getSuperDigit(totalSum);
+        }
+
+        public static int getSuperDigit(long num)
+        {
+            // Nếu số chỉ còn 1 chữ số thì trả về chính nó
+            if (num < 10)
+            {
+                return (int)num;
+            }
+
+            // Tính tổng các chữ số
+            long newSum = num.ToString().ToCharArray().Select(c => (int)
+                                                   char.GetNumericValue(c)).Sum();
+            // Gọi lại hàm đệ quy với tổng mới
+            return getSuperDigit(newSum);
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Please enter n = ");
+            string n = Console.ReadLine();
+            Console.Write("Please enter k = ");
+            int k = Convert.ToInt32(Console.ReadLine());
+
+            int result = Deploy.superDigit(n, k);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // New Year Chaos
+namespace newYearChaos
+{
+    /// <summary> Algorithms Problem
+    /*
+    xác định số lượng "hối lộ" (bribes) mà một người phải trả để chuyển từ một hàng 
+    đứng yên sang một hàng khác.
+
+    - Có n người xếp hàng để nhận quà trong dịp Tết.
+    - Mỗi người có một số thứ tự (1, 2, 3,..., n) mà họ nên đứng theo thứ tự này.
+    - Một người chỉ có thể hối lộ tối đa 2 người đứng trước mình để có thể chuyển
+    lên phía trước trong hàng.
+    - Nếu một người đứng ở vị trí nào đó trong hàng mà họ đã hối lộ hơn 2 người,
+    thì việc đó được coi là bất hợp pháp và cần báo cáo.
+
+    Đầu vào: q: một danh sách các số nguyên, trong đó mỗi số nguyên đại diện cho thứ tự
+    hiện tại của người đứng trong hàng.
+
+    Đầu ra: - Nếu không có ai hối lộ quá hai người, in ra tổng số hối lộ mà mọi người đã 
+    thực hiện.
+    - Nếu có ai đó hối lộ quá hai người, in ra "Too chaotic".
+
+    Sanple Input: q = [2, 1, 5, 3, 4]   
+    sample Output: 3
+    */
+    /// 
+
+    internal class Deploy
+    {
+        public static void minimumBribes(List<int> q)
+        {
+            int totalBrides = 0;
+            bool chaotic = false;
+
+            for (int i = 0; i < q.Count; i++)
+            {
+                // Kiểm tra nếu một người đã hối lộ quá 2 người
+                if (q[i] - (i + 1) > 2)  // (i + 1) là vị trí thật của người thứ i
+                {
+                    chaotic = true;
+                    break;
+                }
+
+                // Tính số hối lộ Chỉ kiểm tra các vị trí trước người hiện tại
+                for (int j = Math.Max(0, q[i] - 2); j < i; j++)
+                {
+                    if (q[j] > q[i])
+                    {
+                        totalBrides++;
+                    }
+                }
+            }
+
+            if (chaotic)
+            {
+                Console.WriteLine("Too chaotic");
+            }
+            else
+            {
+                Console.WriteLine(totalBrides);
+            }
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            List<int> q = new List<int>();
+
+            Console.Write("Please enter n = ");
+            int n = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write($"Please enter element {i}: ");
+                int element = Convert.ToInt32(Console.ReadLine());
+                q.Add(element);
+            }
+
+            Deploy.minimumBribes(q);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+
+
+#endregion
+
+#region Day 4
+
+#if false // Merge Two Sorted Linked Lists
+namespace mergeTwoSortedLists
+{
+    /// <summary> Data Structures
+    /*
+    hợp nhất hai singly linked lists  thành một singly linked lists mới,  với mục tiêu tạo ra
+    một  singly linked lists đã được sắp xếp.
+    Example: headA 1 -> 3 -> 7 -> null
+             headB 1-> 2 -> null
+             the new list: 1 -> 1 -> 2 -> 3 -> 7 -> null
+    Sample Input: nNode1 = 3 => 1 -> 2 -> 3 -> null, nNode2 = 2 => 3 -> 4 -> null
+    Sample Output: 1 -> 2 -> 3 -> 3 -> 4 -> null
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static SinglyLinkedListNode mergeLists(SinglyLinkedListNode head1,
+                                                      SinglyLinkedListNode head2)
+        {
+            // tạo 1 Node tạm thời ngay đầu LinkedList mới
+            SinglyLinkedListNode dummyNode = new SinglyLinkedListNode(0);
+            SinglyLinkedListNode tail = dummyNode;
+
+            while (head1 != null && head2 != null)
+            {
+                if (head1.data <= head2.data)
+                {
+                    tail.next = head1;
+                    head1 = head1.next;
+                }
+                else
+                {
+                    tail.next = head2;
+                    head2 = head2.next;
+                }
+
+                tail = tail.next;
+            }
+
+            if (head1 != null)
+            {
+                tail.next = head1;
+            }
+            if (head2 != null)
+            {
+                tail.next = head2;
+            }
+
+            return dummyNode.next;
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            SinglyLinkedList linkedList1 = new SinglyLinkedList();
+            SinglyLinkedList linkedList2 = new SinglyLinkedList();
+
+            Console.Write("Please enter nnode1 = ");
+            int nNode = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < nNode; i++)
+            {
+                Console.Write($"Please enter value Node {i}: ");
+                int nodeData = Convert.ToInt32(Console.ReadLine());
+                linkedList1.InsertNode(nodeData);
+            }
+
+            Console.Write("Please enter nnode2 = ");
+            int nNode2 = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < nNode2; i++)
+            {
+                Console.Write($"Please enter value Node {i}: ");
+                int nodeData = Convert.ToInt32(Console.ReadLine());
+                linkedList2.InsertNode(nodeData);
+            }
+
+            SinglyLinkedListNode mergedList = Deploy.mergeLists(linkedList1.head, linkedList2.head);
+            SinglyLinkedList.PrintSinglyLinkedList(mergedList, " -> ");
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+
+
+#endregion
+
+#endregion
+
+#region Mock Test
+
+#if false // Find Median
+namespace findMedian
+{
+    /// <summary> Mock test
+    /*
+    Đề Bài: Tìm giá trị trung vị Median
+
+    Định nghĩa:
+    - Median (Trung vị) của một dãy số là giá trị mà chia dãy số thành hai phần 
+    bằng nhau: một nửa các phần tử có giá trị nhỏ hơn trung vị, và nửa còn lại có
+    giá trị lớn hơn trung vị.
+    - Nếu dãy có số phần tử lẻ, thì median là phần tử đứng giữa sau khi dãy đã
+    được sắp xếp.
+    - Nếu dãy có số phần tử chẵn, median là trung bình của hai phần tử ở giữa sau
+    khi dãy được sắp xếp.
+
+    Sameple Input: 1 3 2 4 5    
+    Sample Output: 3
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static int findMedian(List<int> arr)
+        {
+           arr.Sort();
+           
+           int n = arr.Count;
+           int medianIndex = n / 2;
+
+           return arr[medianIndex];
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            List<int> arr = new List<int>();
+            Console.Write("Please enter n = ");
+            int n = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write($"Please enter arr[{i}]: ");
+                int element = Convert.ToInt32(Console.ReadLine());
+                arr.Add(element);
+            }
+
+            int result = Deploy.findMedian(arr);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+
+        }
+    }
+}
+#endif
+
+#if false // Flipping the Matrix
+namespace flippingTheMatrix
+{
+    /// <summary> Mock test
+    /*
+    Cho 1 ma trận hình vuông kích thước 2n x 2n; có nghĩa là số hàng và số cột
+    của ma trận đều là 2n, ví dụ n = 2 ma trận sẽ có 4 hàng và 4 cột.
+
+    có thể lật một phần tử của ma trận , lật ở đây là có thể chọn 1 phần tử và
+    thay thế nó bằng 1 một 4 phần tử tương ứng nằm ở các góc của ma trận.
+
+    cụ thể nếu chọn 1 phần tử tại vị trí (i, j) thì có thể lật sang:
+    Phần tử ở trên bên trái: (i, j)
+    Phần tử ở trên bên phải: (i, 2n - 1 - j)
+    Phần tử ở dưới bên trái: (2n - 1 - i, j)
+    Phần tử ở dưới bên phải: (2n - 1 - i, 2n - 1 - j)
+
+    Mục tiêu cuối cùng là tìm tổng giá trị lớn nhất có thể của các phần tử
+    trong nửa trên của ma trận sau khi bạn có thể lật các phần tử bất kỳ.
+
+    chỉ cần xem xét nửa trên của ma trận, vì có thể chọn lật bất 
+    kỳ phần tử nào từ nửa dưới sang nửa trên để tối đa hóa tổng.
+
+    Sameple Input:    112 42 83 119
+                      56  125 56 49
+                      15  78 101 43
+                      62  98 114 108
+
+    lần lặp 1 (i = 0, j = 0): [112, 119, 62, 108] => 119
+    lần lặp 2 (i = 0, j = 1): [42, 83, 98, 114] => 114
+    lần lặp 3 (i = 1, j = 0): [56, 49, 15, 43] => 56
+    lần lặp 4 (i = 1, j = 1): [125, 56, 78, 101] => 125
+    119 + 114 + 56 + 125 = 414
+
+    Sample Output: 414
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static int flippingMatrix(List<List<int>> maxtrix)
+        {
+            int n = maxtrix.Count / 2; // lấy nữa ma trận
+            int totalMax = 0;
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    int topLeft = maxtrix[i][j];
+                    int topRight = maxtrix[i][2 * n - 1 - j];
+                    int bottomLeft = maxtrix[2 * n - 1 - i][j];
+                    int bottomRight = maxtrix[2 * n - 1 - i][2 * n - 1 - j];
+
+                    int maxValue = Math.Max(topLeft, Math.Max(topRight, Math.
+                                                   Max(bottomLeft, bottomRight)));
+                    totalMax += maxValue;
+                }
+            }
+
+            return totalMax;
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            var matrix = new List<List<int>>();
+
+            Console.Write("Please enter nRow = ");
+            int nRow = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter nColumn = ");
+            int nCol = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < nRow; i++)
+            {
+                var row = new List<int>();
+
+                for (int j = 0; j < nCol; j++)
+                {
+                    Console.Write($"Please enter value row{i} column{j}: ");
+                    int element = Convert.ToInt32(Console.ReadLine());
+                    row.Add(element);
+                }
+
+                matrix.Add(row);
+            }
+
+            int result = Deploy.flippingMatrix(matrix);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Palindrome Index
+namespace palindromeIndex
+{
+    /// <summary> Mock test
+    /*
+    Bài toán yêu cầu tìm chỉ số của một ký tự trong chuỗi mà khi loại bỏ ký tự đó,
+    chuỗi còn lại sẽ trở thành palindrome. Nếu chuỗi đã là palindrome,
+    kết quả trả về là -1.
+
+    Palindrome là chuỗi mà khi đảo ngược vẫn giống hệt chuỗi ban đầu.
+    Ví dụ: "madam", "racecar", "121" là palindrome.
+    Với chuỗi không phải palindrome, nếu loại bỏ một ký tự có thể biến chuỗi
+    thành palindrome, ta phải tìm chỉ số của ký tự đó.
+
+    in ra chỉ số của ký tự cần loại bỏ.
+
+    Sameple Input: aaab 
+    Sample Output: 3 vì aaa là palindrome nên loại bỏ b, b ở vị trí thứ 3.
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static int palindromeIndex(string s)
+        {
+            int n = s.Length;
+
+            // Hàm kiểm tra xem một chuỗi có phải palindrome không
+            bool IsPalindrome(string str, int start, int end)
+            {
+                while (start < end)
+                {
+                    if (str[start] != str[end])
+                        return false;
+                    start++;
+                    end--;
+                }
+
+                return true;
+            }
+
+            // Duyệt từ đầu tới giữa chuỗi
+            for (int i = 0; i < n / 2; i++)
+            {
+                if (s[i] != s[n - 1 - i])
+                {
+                    // Kiểm tra nếu bỏ ký tự tại vị trí i hoặc n-1-i
+                    // có tạo ra palindrome không
+                    if (IsPalindrome(s, i + 1, n - 1 - i))
+                        return i;
+                    if (IsPalindrome(s, i, n - 2 - i))
+                        return n - 1 - i;
+                }
+            }
+
+            return -1;
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Please enter string: ");
+            string s = Console.ReadLine();
+
+            int result = Deploy.palindromeIndex(s);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Truck Tour
+namespace truckTour
+{
+    /// <summary> Mock test
+    /*
+    tìm ra điểm xuất phát của một chuyến hành trình mà tại đó một chiếc xe tải có 
+    thể đi qua tất cả  các trạm xăng mà không hết xăng.
+
+    cho một danh sách các trạm xăng, mỗi trạm có hai giá trị:
+    - xăng (petrol): lượng xăng mà trạm cung cấp.
+    - khoảng cách (distance): khoảng cách đến trạm xăng tiếp theo.
+
+    tìm ra chỉ số của trạm xăng từ đó có thể bắt đầu hành trình, 
+    và đi qua tất cả các trạm xăng mà không hết xăng.
+
+    ví dụ: Trạm 0 cung cấp 4 lít xăng và cần 6 lít để đến trạm tiếp theo.
+           Trạm 1 cung cấp 6 lít xăng và cần 5 lít để đến trạm tiếp theo.
+           Trạm 2 cung cấp 7 lít xăng và cần 3 lít để đến trạm tiếp theo.
+           Trạm 3 cung cấp 4 lít xăng và cần 5 lít để đến trạm tiếp theo.
+
+           Tổng xăng: 4 + 6 + 7 + 4 = 21
+           Tổng khoảng cách: 6 + 5 + 3 + 5 = 19
+
+    Bắt đầu từ trạm 0: 
+    Xăng còn lại: 4 - 6 = - 2 không thể bắt đầu từ trạm 0 startIndex thành 1
+    Bắt đầu từ trạm 1:
+    Xăng còn lại: 6 - 5 = 1 xăng còn lại có thể tiếp tục
+    Từ trạm 1 đến trạm 2: 
+    Xăng còn lại: 1 + 7 - 3 = 5 xăng còn lại có thể tiếp tục
+    Từ trạm 2 đến trạm 3:
+    Xăng còn lại: 5 + 4 - 5 = 4 xăng còn lại có thể tiếp tục
+    Từ trạm 3 quay lại trạm 0:
+    Xăng còn lại: 4 + 4 - 6 = 2 xăng còn lại có thể tiếp tục
+
+    Tổng kết lại, có thể hoàn thành hành trình bắt đầu từ trạm 1
+
+    Sample Input: 4 6
+                  6 5
+                  7 3
+                  4 5
+
+    Sample Output: 1
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static int truckTour(List<List<int>> petrolpumps)
+        {
+            int totalPetrol = 0;
+            int totalDistance = 0;
+            int currentPetrol = 0;
+            int startindex = 0;
+
+            for (int i = 0; i < petrolpumps.Count; i++)
+            {
+                int petrol = petrolpumps[i][0];
+                int distance = petrolpumps[i][1];
+
+                totalPetrol += petrol;
+                totalDistance += distance;
+
+                currentPetrol += petrol - distance;
+
+                // Nếu xăng còn lại < 0, không thể đi tiếp từ trạm này
+                if (currentPetrol < 0)
+                {
+                    startindex = i + 1; // Đặt lại điểm xuất phát
+                    currentPetrol = 0; // Bắt đầu lại từ trạm tiếp theo
+                }
+            }
+
+            // Nếu tổng xăng >= tổng khoảng cách, có đủ xăng từ trạm startindex
+            return totalPetrol >= totalDistance ? startindex : -1;
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            List<List<int>> petrolpumps = new List<List<int>>();
+
+            Console.Write("Please enter nRow: ");
+            int nRow = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("nCol = 2 ");
+            int nCol = 2;
+
+            for (int i = 0;i < nRow; i++)
+            {
+                List<int> row = new List<int>();
+                for (int j = 0;j < nCol; j++)
+                {
+                    Console.Write($"Please enter element nRow {i} nCol {j}: ");
+                    int element = Convert.ToInt32( Console.ReadLine());
+                    row.Add(element);
+                }
+
+                petrolpumps.Add(row);
+            }
+
+            int result = Deploy.truckTour(petrolpumps);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
 
 #endregion
 
