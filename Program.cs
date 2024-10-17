@@ -77,6 +77,24 @@ namespace LinkedList
                     }
                 }
             }
+
+            public static void CreateCycle(SinglyLinkedList linkedList, 
+                                                                  int cycleIndex)
+            {
+                if (cycleIndex == -1) return;
+
+                SinglyLinkedListNode cycleNode = linkedList.head;
+
+                for (int i = 0; i < cycleIndex; i++)
+                {
+                    if (cycleNode != null)
+                    {
+                        cycleNode = cycleNode.next;
+                    }
+                }
+
+                linkedList.tail.next = cycleNode;
+            }
         }
     }
 
@@ -2318,20 +2336,23 @@ namespace sequenceEquation
 }
 #endif
 
-#if false // Jumping On The Cloud
+#if false // Jumping On The Cloud (Array)
 namespace jumpingOnTheCloud
 {
     /// <summary> Algorithms Problem
     /*
-    Cho một mảng đám mây, mỗi đám mây có giá trị 0 là an toàn và giá trị 1 là nguy hiểm.
-    bắt đầu tại vị trí đầu tiên index = 0, và nhảy qua các đám mây với bước nhảy cố
-    định là k.
-    Khi thực hiện 1 bước nhảy, sẽ phải tránh các đám mây nguy hiểm (đám mây có giá trị 1)
-    mỗi lần nhảy sẽ mất đi 1 điểm năng lượng, và nếu nhảy vào đám mây nguy hiểm thì
-    sẽ mất thêm 2 năng lượng.
-    Tính toán năng lượng còn lại sau khi thực hiện xong các bước nhảy qua tất cả đám
-    mây và quay trở lại vị trí ban đầu.
+    Cho một mảng đám mây, mỗi đám mây có giá trị 0 là an toàn và giá trị 1 là 
+    nguy hiểm. bắt đầu tại vị trí đầu tiên index = 0, và nhảy qua các đám mây với 
+    bước nhảy cố định là k.
+
+    Khi thực hiện 1 bước nhảy, sẽ phải tránh các đám mây nguy hiểm (đám mây có giá
+    trị 1) mỗi lần nhảy sẽ mất đi 1 điểm năng lượng, và nếu nhảy vào đám mây 
+    nguy hiểm thì sẽ mất thêm 2 năng lượng.
+
+    Tính toán năng lượng còn lại sau khi thực hiện xong các bước nhảy qua tất cả 
+    đám mây và quay trở lại vị trí ban đầu.
     Cho năng lượng ban đầu là 100.
+
     Sample Input: n = 8 => 0 0 1 0 0 1 1 0 , k = 2
     Sample Output: 92
     */
@@ -2748,7 +2769,146 @@ namespace cutTheSticks
 
 #region Algorithms Easy 5
 
+#if false // Repeated String
+namespace repeatedString
+{
+    /// <summary> Algprithms Problem
+    /*
+    Cho có một chuỗi nhỏ s và cần lặp lại chuỗi này nhiều lần để tạo ra một 
+    chuỗi lớn có độ dài n.  Sau đó, cần đếm số lần xuất hiện của ký tự 'a' 
+    trong chuỗi lớn đó.
 
+    Ví dụ:
+    Chuỗi s = "abcac".
+    muốn lặp lại chuỗi s để tạo thành một chuỗi lớn có độ dài n = 10.
+    Sau khi lặp lại chuỗi s, chuỗi lớn sẽ là "abcacabcac" (có độ dài đúng 10).
+    Trong chuỗi lớn đó, ký tự 'a' xuất hiện 4 lần.
+
+    in ra 4.
+
+    Sample Input: s =  aba , n  = 10
+    Sample Output: 7
+    */
+    /// </summary> 
+
+    internal class Deploy
+    {
+        public static long repeatedString(string s, long n)
+        {
+            // Đếm số lượng 'a' trong chuỗi s
+            long countA = s.Count(c => c == 'a');
+
+            // Tính số lần lặp lại đầy đủ trong chuỗi s
+            long fullRepeats = n / s.Length;
+
+            // nếu dư thì Tính phần dư chưa đầy đủ của chuỗi s
+            long remainder = n % s.Length;
+
+            // Đếm số 'a' trong phần dư của chuỗi s
+            long countRemainderA = s.Substring(0, (int)remainder).
+                                                                 Count(c => c == 'a');
+
+            // Tính tổng số 'a' trong chuỗi độ dài n
+            return fullRepeats * countA + countRemainderA;
+
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Please enter s = ");
+            string s = Console.ReadLine();
+            Console.Write("Please enter n = ");
+            long n = long.Parse(Console.ReadLine());
+
+            long result = Deploy.repeatedString(s, n);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Jumping On The Cloud 2
+namespace jumpingOnTheCloud2
+{
+    /// <summary> Algorithms Problem
+    /*
+    cho một dãy số đại diện cho các đám mây
+    Mỗi phần tử của mảng c là 0 hoặc 1:
+    - 0 biểu thị đám mây an toàn mà có thể nhảy lên.
+    - 1 biểu thị đám mây có sấm sét mà không được nhảy lên.
+
+    tính toán số bước nhảy ít nhất cần thiết để đi từ đám mây đầu tiên (vị trí 0) 
+    đến đám mây cuối cùng (vị trí cuối cùng của mảng). 
+    có thể nhảy tối đa 2 bước mỗi lần, nhưng chỉ được nhảy lên các đám mây an toàn
+
+    Ví dụ:
+    Dãy c = [0, 1, 0, 0, 0, 1, 0].
+    Bắt đầu từ vị trí 0.
+    Nhảy 2 bước đến vị trí 2.
+    Nhảy 2 bước đến vị trí 4.
+    Nhảy 2 bước đến vị trí 6.
+    vậy cần 3 lần nhảy in ra 3
+
+    Sample Input: n = 7 =>  0 0 1 0 0 1 0
+    Sample Output: 4
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static int jumpingOnClouds2(List<int> c )
+        {
+            int jumps = 0;
+            int i = 0;
+
+            // Duyệt qua các đám mây từ vị trí đầu tiên đến gần cuối
+            while (i < c.Count - 1)
+            {
+                if ( i + 2 < c.Count && c[i + 2] == 0)
+                {
+                    i += 2;
+                }
+                else
+                {
+                    i += 1;
+                }
+
+                jumps++;
+            }
+
+            return jumps;
+
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            List<int> c = new List<int>();
+            Console.Write("Please enter n = ");
+            int n = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write($"Please enter element {i} is 0 or 1: ");
+                int element = Convert.ToInt32(Console.ReadLine());
+                c.Add(element);
+            }
+
+            int result = Deploy.jumpingOnClouds2(c);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
 
 #endregion
 
@@ -4277,6 +4437,97 @@ namespace matchingString
 
             List<int> result = Deploy.matchingString(stringList, queries);
             Console.WriteLine(string.Join(", ", result));
+
+            Console.ReadLine();
+
+        }
+    }
+}
+#endif
+
+#if false // Cycle Detection (Cycle LinkedList)
+namespace cycleDetection
+{
+    /// <summary> Data Structers
+    /*
+    Cho một danh sách liên kết đơn (Singly Linked List) kiểm tra xem 
+    (Singly Linked List) có chứa chu kỳ (cycle) hay không, Một chu kỳ trong
+    Singly Linked List xảy ra khi một node nào đó trỏ ngược về một node đã xuất 
+    hiện trước đó tạo ra một vòng lặp.
+
+    Ví dụ:
+    1 -> 2 -> 3 ---> trỏ về lại 2
+    Trong trường hợp này, node cuối cùng trỏ ngược lại về node thứ 2
+    tạo thành một chu kỳ. kiểm tra xem có tồn tại chu kỳ như vậy hay không.
+
+    để làm dc dùng thuật toán hai con trỏ:
+    Khởi tạo hai con trỏ, con trỏ "chậm" và con trỏ "nhanh", 
+    cả hai đều bắt đầu tại node đầu tiên,
+    Con trỏ "chậm" di chuyển một bước mỗi lần.
+    Con trỏ "nhanh" di chuyển hai bước mỗi lần.
+    Nếu tại bất kỳ thời điểm nào, con trỏ "nhanh" và con trỏ "chậm" gặp nhau, 
+    thì chắc chắn có một chu kỳ trong danh sách.
+    Nếu con trỏ "nhanh" đạt tới cuối danh sách (null), 
+    điều đó có nghĩa là danh sách không có chu kỳ.
+
+    Sample Input: 3 -> 2 -> 0 <-> -4 
+    Sample Output:  true
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static bool hasCycle(SinglyLinkedListNode head)
+        {
+            // Nếu danh sách trống hoặc chỉ có 1 phần tử thì chắc chắn
+            // không có chu kỳ
+            if (head == null || head.next == null)
+            {
+                return false;
+            }
+
+            // Khởi tạo hai con trỏ: slow (chậm) và fast (nhanh)
+            SinglyLinkedListNode slow = head;
+            SinglyLinkedListNode fast = head;
+
+            while (fast != null && fast.next != null)
+            {
+                slow = slow.next;
+                fast = fast.next.next;
+
+                if (slow == fast)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            SinglyLinkedList linkedList = new SinglyLinkedList();
+            Console.Write("Please enter nNode = ");
+            int nNode = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < nNode; i++)
+            {
+                Console.Write($"Please enter Node Value {i}: ");
+                int NodeValue = Convert.ToInt32(Console.ReadLine());
+                linkedList.InsertNode(NodeValue);
+            }
+
+            Console.Write("Enter index to form cycle (enter -1 for no cycle): ");
+            int cycleindex = Convert.ToInt32(Console.ReadLine());
+            SinglyLinkedList.CreateCycle(linkedList, cycleindex);
+
+
+            bool result = Deploy.hasCycle(linkedList.head);
+            Console.WriteLine(result);
 
             Console.ReadLine();
 
