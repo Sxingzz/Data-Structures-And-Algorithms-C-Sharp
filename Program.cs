@@ -16,7 +16,9 @@ using System.Numerics;
 #region Self-written library
 
 using LinkedList.SinLinkedList;
+using LinkedList.DouLinkedList;
 using System.Net;
+using System.Collections;
 
 namespace LinkedList
 {
@@ -95,6 +97,96 @@ namespace LinkedList
 
                 linkedList.tail.next = cycleNode;
             }
+
+            public static void ConnectListsAtPosition(SinglyLinkedList list1, 
+                                          SinglyLinkedList list2, int position)
+            {
+                if (list1.head == null || list2.head == null)
+                {
+                    return;
+                }
+
+                SinglyLinkedListNode current = list1.head;
+                for (int i = 0; i < position && current != null; i++)
+                {
+                    current = current.next;
+                }
+
+                if (current != null)
+                {
+                    SinglyLinkedListNode temp = list2.head;
+                    while (temp.next != null)
+                    {
+                        temp = temp.next;
+                    }
+                    temp.next = current;
+                }
+            }
+
+        }
+    }
+
+    // tạo DoublyLinkList
+    namespace DouLinkedList
+    {
+        class DoublyLinkedListNode
+        {
+            public int data;
+            public DoublyLinkedListNode next;
+            public DoublyLinkedListNode prev;
+
+            public DoublyLinkedListNode(int nodeData)
+            {
+                this.data = nodeData;
+                this.next = null;
+                this.prev = null;
+            }
+        }
+
+        class DoublyLinkedList
+        {
+            public DoublyLinkedListNode head;
+            public DoublyLinkedListNode tail;
+
+            public DoublyLinkedList()
+            {
+                this.head = null;
+                this.tail = null;
+            }
+
+            public void InsertNode(int nodeData)
+            {
+                DoublyLinkedListNode node = new DoublyLinkedListNode(nodeData);
+
+                if (this.head == null)
+                {
+                    this.head = node;
+                }
+                else
+                {
+                    this.tail.next = node;
+                    node.prev = this.tail;
+                }
+
+                this.tail = node;
+            }
+
+            public static void PrintDoublyLinkedList(DoublyLinkedListNode node,
+                                                                    string sep)
+            {
+                while (node != null)
+                {
+                    Console.Write(node.data);
+
+                    node = node.next;
+
+                    if (node != null)
+                    {
+                        Console.Write(sep);
+                    }
+                }
+            }
+
         }
     }
 
@@ -2910,6 +3002,252 @@ namespace jumpingOnTheCloud2
 }
 #endif
 
+#if false // Equalize the Array
+namespace equalizeTheArray
+{
+    /// <summary> Algorithms Problem
+    /*
+    làm cho tất cả các phần tử trong mảng trở nên giống nhau bằng cách xóa các
+    phần tử khác nhau, in ra số phần tử khác nhau cần xóa.
+
+    Ví dụ:
+    Giả sử mảng đầu vào là [3, 3, 2, 1, 3]:
+    Các phần tử và số lần xuất hiện sẽ là: {3: 3, 2: 1, 1: 1}.
+    Số lần xuất hiện tối đa là 3 (phần tử 3 xuất hiện 3 lần).
+    Tổng số phần tử là 5, do đó số phần tử cần xóa sẽ là 5 - 3 = 2.
+
+    in ra 2.
+
+    Sample Input: n = 5 =>  3 3 2 1 3
+    Sample Output: 2   
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static int equalizeArray(List<int> arr )
+        {
+            Dictionary<int, int> frequency = new Dictionary<int, int>();
+
+            foreach (var num in arr)
+            {
+                if (frequency.ContainsKey(num))
+                {
+                    frequency[num]++;
+                }
+                else
+                {
+                    frequency[num] = 1;
+                }
+            }
+
+            // Tìm số lần xuất hiện tối đa
+            int maxFrequency = frequency.Values.Max();
+
+            // Số lượng phần tử cần xóa
+            int elementsToRemove = arr.Count - maxFrequency;
+
+            return elementsToRemove;
+
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            var arr = new List<int>();
+            Console.Write("Please enter n = ");
+            int n = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write($"Please enter elements {i}: ");
+                int element = Convert.ToInt32(Console.ReadLine());
+                arr.Add(element);
+            }
+
+            int result = Deploy.equalizeArray(arr);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // ACM ICPC Team
+namespace aCMICPCTeam
+{
+    /// <summary> Algorithms Problem
+    /*
+    cho n thành viên, mỗi thành viên có một danh sách nhị phân độ dài m biểu thị 
+    kỹ năng của họ.
+    Nếu giá trị tại vị trí i là 1, nghĩa là thành viên đó có kỹ năng ở lĩnh vực i.
+    Nếu là 0, họ không có kỹ năng ở lĩnh vực đó.
+
+    cần tìm ra: 
+    - Số lượng tối đa kỹ năng mà một nhóm có thể biết (kết hợp 2 thành viên).
+    - Số lượng nhóm có thể đạt được số kỹ năng tối đa này.
+
+    ví dụ: 
+           Số lượng thành viên (n = 4). 
+           Số lượng kỹ năng (m = 5).
+
+                  Thành viên 1: 10101
+                  Thành viên 2: 11100
+                  Thành viên 3: 11010
+                  Thành viên 4: 00101
+
+    Tính số kỹ năng mà mỗi cặp thành viên có:
+    Cặp (1, 2): 10101 OR 11100 = 11101 (có 4 trên 5 kỹ năng)
+    Cặp (1, 3): 10101 OR 11010 = 11111 (có 5 trên 5 kỹ năng)
+    Cặp (1, 4): 10101 OR 00101 = 10101 (có 3 trên 5 kỹ năng)
+    Cặp (2, 3): 11100 OR 11010 = 11110 (có 4 trên 5 kỹ năng)
+    Cặp (2, 4): 11100 OR 00101 = 11101 (có 4 trên 5 kỵ năng)
+    Cặp (3, 4): 11010 OR 00101 = 11111 (có 5 trên 5 kỹ năng)
+
+    Sau khi kiểm tra tất cả các cặp, kỹ năng tối đa mà một nhóm có thể biết là 5.
+    Có 2 nhóm đạt được kỹ năng tối đa (các cặp (1, 3) và (3, 4)).
+
+    in ra 5, 2.
+
+    Sample Input: Số lượng thành viên (n = 4). 
+                  Số lượng kỹ năng (m = 5).
+                  Thành viên 1: 10101
+                  Thành viên 2: 11100
+                  Thành viên 3: 11010
+                  Thành viên 4: 00101
+
+    Sample Output: 5, 2 
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static List<int> acmTeam(List<string> topic )
+        {
+            int n = topic.Count; // xác định dc số lượng thành viên
+            int maxSkills = 0; // Kỹ năng tối đa
+            int teamCount = 0; // Số lượng đội có kỹ năng tối đa
+
+            for (int i = 0; i < n; i++) // thành viên 1
+            {
+                for (int j = i + 1; j < n; j++) // thành viên 2
+                {
+                    // OR bitwise giữa hai chuỗi nhị phân của thành viên i và j
+                    int combinedSkills = 0;
+                    for (int k = 0; k < topic[i].Length; k++) // k là số lần xét từng cặp
+                    {
+                        if (topic[i][k] == '1' || topic[j][k] == '1')
+                        {
+                            combinedSkills++;
+                        }
+                    }
+
+                    if (combinedSkills > maxSkills)
+                    {
+                        maxSkills = combinedSkills;
+                        teamCount = 1;
+                    }
+                    else if (combinedSkills == maxSkills)
+                    {
+                        teamCount++;
+                    }
+                }
+            }
+
+            return new List<int> { maxSkills, teamCount };
+
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            var topic = new List<string>();
+            Console.Write("Please enter n Number of members = ");
+            int n = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < n ; i++)
+            {
+                Console.Write($"Please enter element {i}: ");
+                topic.Add(Console.ReadLine());
+            }
+
+            var result = Deploy.acmTeam(topic);
+            Console.WriteLine(string.Join(" ", result));
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Taum and B'day
+namespace taumAndBday
+{
+    /// <summary> Algorithms Problem
+    /*
+    tính toán chi phí tối thiểu để mua b hộp quà đen và w hộp quà trắng
+    Chi phí mua mỗi hộp quà có thể thay đổi, và có thể có một tùy chọn mua một 
+    hộp màu khác rồi đổi sang màu mong muốn với một chi phí chuyển đổi nhất định.
+
+     - cần mua b hộp quà đen và w hộp quà trắng.
+     - Giá mua một hộp quà đen là bc, giá mua một hộp quà trắng là wc
+    và chi phí để chuyển đổi một hộp quà từ màu này sang màu kia là z.
+     - có thể mua hộp quà đen với giá bc hoặc mua hộp quà trắng với giá wc
+    rồi trả thêm z để chuyển nó thành hộp quà đen.
+     - Tương tự, có thể mua hộp quà trắng với giá wc hoặc mua hộp quà đen với giá bc 
+    rồi trả thêm z để chuyển nó thành hộp quà trắng.
+
+    Tính toán chi phí tối thiểu để mua số lượng hộp quà cần.
+
+    Sample Input: b = 10, w = 10, bc = 1, wc = 1, z = 1
+    Sample Output: 20
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static long taumBday(int b, int w, int bc, int wc, int z)
+        {
+            // Tính toán chi phí tối thiểu cho hộp quà đen
+            long costBlack = Math.Min(bc, wc + z);
+
+            // Tính toán chi phí tối thiểu cho hộp quà trắng
+            long costWhite = Math.Min(wc, bc + z); 
+
+            return b * costBlack + w * costWhite;
+
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Please enter b = ");
+            int b = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter w = ");
+            int w = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter bc = ");
+            int bc = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter wc = ");
+            int wc = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter z = ");
+            int z = Convert.ToInt32(Console.ReadLine());
+
+            long result = Deploy.taumBday(b, w, bc, wc, z);
+            Console.WriteLine(result);  
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
 #endregion
 
 #region Algorithms Medium 1
@@ -3280,6 +3618,154 @@ namespace NonDivisibleSubset
             int k = Convert.ToInt32(Console.ReadLine());
 
             int result = Deploy.nonDivisibleSubset(k , s);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Queen's Attack 2 (List<List<int>>)
+namespace queenAttack2
+{
+    /// <summary> Algprithms Problem
+    /*
+    tính toán số ô mà quân hậu (Queen) có thể di chuyển trên một bàn cờ n x n.
+    có một số chướng ngại vật (obstacles) trên bàn cờ cản đường di chuyển của quân hậu.
+
+    n: kích thước của bàn cờ (bàn cờ có kích thước n x n).
+    k: số lượng chướng ngại vật trên bàn cờ.
+    r_q, c_q: vị trí hiện tại của quân hậu (hàng và cột trên bàn cờ, tính từ 1 đến n).
+    obstacles: danh sách các chướng ngại vật trên bàn cờ,mỗi chướng ngại vật
+    được mô tả bằng cặp tọa độ (row, col).
+
+     Tính tổng số ô mà quân hậu có thể di chuyển được và in ra.
+
+
+    Sample Input: n = 5 (5x5), k = 3 (3 chướng ngại vật)
+                  r_q = 4, c_q = 3 (quân hậu nằm trên hàng 4 cột 3)
+                  obstacles = 5 5   Chướng ngại vật 1 nằm tại hàng 5, cột 5.
+                              4 2   Chướng ngại vật 2 nằm tại hàng 4, cột 2.
+                              2 3   Chướng ngại vật 3 nằm tại hàng 2, cột 3.
+
+    hình minh họa trên bàn cờ: x là obstacles, q là quân hậu.
+
+                    5   .   .   .   .   X
+                    4   .   X   Q   .   .
+                    3   .   .   .   .   .
+                    2   .   .   X   .   .
+                    1   .   .   .   .   .
+
+                        1   2   3   4   5
+
+    Sample Output: 10
+    */
+    /// </summary> 
+
+    internal class Deploy
+    {
+        public static int queenAttack(int n, int k, int r_q, int c_q, 
+                                                            List<List<int>> obtacles)
+        {
+            // Khởi tạo các giới hạn di chuyển của quân hậu theo 8 hướng
+            int left = c_q - 1;
+            int right = n - c_q;
+            int up = n - r_q;
+            int down = r_q - 1;
+            int upLeft = Math.Min(up, left);
+            int upRight = Math.Min(up, right);
+            int downLeft = Math.Min(down, left);
+            int downRight = Math.Min(down, right);
+
+            foreach (var obtacle  in obtacles)
+            {
+                int r_o = obtacle[0];
+                int c_o = obtacle[1];
+
+                // Nếu chướng ngại vật nằm trên cùng một hàng
+                if (r_o == r_q)
+                {
+                    if (c_o < c_q)
+                    {
+                        left = Math.Min(left, c_q - c_o - 1);
+                    }
+                    else if (c_o > c_q)
+                    {
+                        right = Math.Min(right, c_o - c_q - 1);
+                    }
+                }
+                // Nếu chướng ngại vật nằm trên cùng một cột
+                else if (c_o == c_q)
+                {
+                    if (r_o < r_q)
+                    {
+                        down = Math.Min(down, r_q - r_o - 1);
+                    }
+                    else if (r_o > r_q)
+                    {
+                        up = Math.Min(up, r_o - r_q - 1);
+                    }
+                }
+                // Nếu chướng ngại vật nằm trên đường chéo phải trên
+                else if (r_o - r_q == c_o - c_q)
+                {
+                    if (r_o > r_q)
+                    {
+                        upRight = Math.Min(upRight, r_o - r_q - 1);
+                    }
+                    else
+                    {
+                        downLeft = Math.Min(downLeft, r_q - r_o - 1);
+                    }
+                }
+                // Nếu chướng ngại vật nằm trên đường chéo trái trên
+                else if (r_o - r_q == c_q - c_o)
+                {
+                    if (r_o > r_q)
+                    {
+                        upLeft = Math.Min(upLeft, r_o - r_q - 1);
+                    }
+                    else
+                    {
+                        downRight = Math.Min(downRight, r_q - r_o - 1);
+                    }
+                }
+            }
+
+            return left + right + up + down + upLeft + upRight + downLeft + 
+                                                                       downRight;
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Please enter n = ");
+            int n = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter k = ");
+            int k = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter r_q = ");
+            int r_q = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter c_q = ");
+            int c_q = Convert.ToInt32(Console.ReadLine());
+
+            List<List<int>> obstacles = new List<List<int>>();
+            int nRow = 3;
+            int nCol = 2;
+            for (int i = 0; i < nRow; i++)
+            {
+                List<int> row = new List<int>();
+                for (int j = 0; j < nCol; j++)
+                {
+                    Console.Write($"Please enter obstacle {i}_{j}: ");
+                    row.Add(Convert.ToInt32(Console.ReadLine()));
+                }
+                obstacles.Add(row);
+            }
+
+            int result = Deploy.queenAttack(n, k, r_q, c_q, obstacles);
             Console.WriteLine(result);
 
             Console.ReadLine();
@@ -4360,6 +4846,199 @@ namespace deleteDuplicateValueFromASortedLinkedList
 
             var result = Deploy.removeDuplicates(SinLinkedList.head);
             SinglyLinkedList.PrintSinglyLinkedList(result, " -> ");
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Find Merge Point Of Two Lists (Connect Node trong library)
+namespace findMergePointOfTwoLists
+{
+    /// <summary> Data Structures
+    /*
+    tìm nút hợp nhất (merge point) trong hai (singly linked lists)
+    chúng ta cần xác định vị trí mà hai danh sách này bắt đầu chia sẻ các nút.
+    tìm nút đầu tiên mà hai singly linked lists gặp nhau.
+
+    Tạo hai con trỏ (ptr1 và ptr2) để lần lượt đi qua hai singly linked lists
+    (head1 và head2).
+    Nếu một trong hai danh sách dài hơn, thì khi con trỏ kết thúc một danh sách
+    sẽ gán lại nó đến đầu của danh sách còn lại. 
+    Điều này giúp hai con trỏ sẽ di chuyển đến nút hợp nhất cùng lúc.
+    Khi hai con trỏ gặp nhau (tức là chúng trỏ tới cùng một nút), 
+    đó chính là nút hợp nhất.
+
+    in ra nút mà hai trỏ gặp nhau.
+
+    Sample Input: 
+                        1--->2
+                              \
+                               3--->Null
+                              /
+                             1
+
+    list1 = 1 -> 2 -> 3 -> null
+    list2 = 1 -> nối tiếp với nút 3 của list 1 
+
+    Sample Output: 3
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static int findMergeNode(SinglyLinkedListNode head1,
+                                                       SinglyLinkedListNode head2)
+        {
+            if (head1 == null || head2 == null)
+            {
+                return -1;
+            }
+
+            SinglyLinkedListNode ptr1 = head1;
+            SinglyLinkedListNode ptr2 = head2;
+
+            while (ptr1 != ptr2)
+            {
+                // Nếu ptr1 đến cuối danh sách, chuyển nó đến đầu danh sách head2
+                ptr1 = (ptr1 == null) ? head2 : ptr1.next;
+                // Nếu ptr2 đến cuối danh sách, chuyển nó đến đầu danh sách head1
+                ptr2 = (ptr2 == null) ? head1 : ptr2.next;
+            }
+
+            return ptr1.data;
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            SinglyLinkedList linkedList1 = new SinglyLinkedList();
+            SinglyLinkedList linkedList2 = new SinglyLinkedList();
+
+            Console.Write("Please enter nNode1 = ");
+            int nNode1 = Convert.ToInt32(Console.ReadLine());
+            for (int i = 0; i < nNode1; i++)
+            {
+                Console.Write($"Please enter Node value {i} for list1: ");
+                int nodeValue = Convert.ToInt32(Console.ReadLine());
+                linkedList1.InsertNode(nodeValue);
+            }
+
+            Console.Write("Please enter nNode2 = ");
+            int nNode2 = Convert.ToInt32(Console.ReadLine());
+            for (int i = 0;i < nNode2; i++)
+            {
+                Console.Write($"Please enter Node Value {i} for list2: ");
+                int nodeValue = Convert.ToInt32(Console.ReadLine());
+                linkedList2.InsertNode(nodeValue);
+            }
+
+            Console.Write("Enter the position connect with list 1: ");
+            int connectPosition = Convert.ToInt32(Console.ReadLine());
+            SinglyLinkedList.ConnectListsAtPosition(linkedList1, linkedList2, 
+                                                                connectPosition);
+
+            int result = Deploy.findMergeNode(linkedList1.head, linkedList2.head);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Inserting a Node Into a Sorted Doubly Linked List
+namespace insertingANodeIntoASortedDoublyLinkedList
+{
+    /// <summary> Data Structures
+    /*
+    chèn một nút mới vào DoublyLinkedList với thứ tự tăng dần.
+
+    Sample Input: nNode = 4 => null <- 1 <-> 3 <-> 4 <-> 10 -> null, data = 5             
+    Sample Output: 1 3 4 5 10
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static DoublyLinkedListNode sortedInsert(DoublyLinkedListNode llist,
+                                                       int data)
+        {
+            DoublyLinkedListNode newNode = new DoublyLinkedListNode(data);
+
+            if (llist == null)
+            {
+                return newNode;
+            }
+
+            // Trường hợp chèn vào đầu
+            if (data < llist.data)
+            {
+                newNode.next = llist;
+                llist.prev = newNode;
+                return newNode;
+            }
+
+            // Duyệt danh sách để tìm vị trí chèn
+            DoublyLinkedListNode current = llist;
+            while(current != null && current.data < data)
+            {
+                current = current.next;
+            }
+
+            // Chèn vào giữa
+            if (current != null)
+            {
+                newNode.prev = current.prev;
+                newNode.next = current;
+                if (current.prev != null)
+                {
+                    current.prev.next = newNode;
+                }
+                current.prev = newNode;
+            }
+            else
+            {
+                // Nếu chèn vào cuối
+                DoublyLinkedListNode tail = llist;
+                while (tail.next != null)
+                {
+                    tail = tail.next;
+                }
+
+                newNode.prev = tail;
+                tail.next = newNode;
+            }
+
+            return llist;
+            
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            DoublyLinkedList linkedList = new DoublyLinkedList();
+            Console.Write("Please enter nNode = ");
+            int nNode = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < nNode; i++)
+            {
+                Console.Write("Please enter NodeData = ");
+                int nodeData = Convert.ToInt32(Console.ReadLine());
+                linkedList.InsertNode(nodeData);
+            }
+
+            Console.Write("Please enter data = ");
+            int data = Convert.ToInt32(Console.ReadLine());
+
+            DoublyLinkedListNode result = Deploy.sortedInsert(linkedList.head, 
+                                                                            data);
+            DoublyLinkedList.PrintDoublyLinkedList(result, " <-> ");
 
             Console.ReadLine();
         }
