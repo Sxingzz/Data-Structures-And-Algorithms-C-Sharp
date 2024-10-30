@@ -12,13 +12,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Numerics;
+using System.Net;
+using System.Collections;
+using System.Data;
 
 #region Self-written library
 
 using LinkedList.SinLinkedList;
 using LinkedList.DouLinkedList;
-using System.Net;
-using System.Collections;
+
+using BinaryTree.TreePreorderTraversal;
 
 namespace LinkedList
 {
@@ -187,6 +190,58 @@ namespace LinkedList
                 }
             }
 
+        }
+    }
+
+}
+
+namespace BinaryTree
+{
+    namespace TreePreorderTraversal
+    {
+        class Node
+        {
+            public int data;
+            public Node left;
+            public Node right;
+
+            public Node(int value)
+            {
+                data = value;
+                left = null;
+                right = null;
+            }
+
+            public static Node CreateBinaryTree(string 
+                           message = "Please enter Root Node or e to Stop: ")
+            {
+                Console.Write(message);
+                string input = Console.ReadLine();
+
+                if (input.ToLower() == "e")
+                {
+                    return null;
+                }
+
+                if (int.TryParse(input, out int value))
+                {
+                    Node root = new Node(value);
+
+                    root.left = CreateBinaryTree($"Please enter value for Left" +
+                                           $"Node of {value} or e to Stop: ");
+
+                    root.right = CreateBinaryTree($"Please enter value for Right" +
+                                           $"Node of {value} or e to Stop: ");
+
+                    return root;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input." +
+                        "Please enter a valid integer.");
+                    return CreateBinaryTree(message);
+                }
+            }
         }
     }
 
@@ -3248,6 +3303,76 @@ namespace taumAndBday
 }
 #endif
 
+#if false // Modified Kaprekar Numbers
+namespace modifiedKaprekarNumbers
+{
+    /// <summary> Algorithms Problem
+    /*
+    tìm các số Kaprekar trong khoảng từ p đến q
+    Một số nguyên dương n được gọi là số Kaprekar nếu sau khi bình phương nó,
+    số này có thể được chia thành hai phần sao cho tổng của chúng bằng chính số đó.
+    ví dụ số Kaprekar: 9^2 = 81 Chia thành left = 8 và right = 1. 8+1=9 (đúng)
+
+    Ví dụ: Với p = 1 và q = 100 các số Kaprekar trong khoảng này là: 1, 9, 45, và 55.
+
+    Sample Input:  p = 1 và q = 100
+    Sample Output: 1 9 45 55 99
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static void kaprekarNumber(int p, int q)
+        {
+            List<int> kaprekarList = new List<int>();
+
+            for (int i = p; i <= q; i++)
+            {
+                long square = (long)i * i;
+                string squareStr = square.ToString();
+                int d = i.ToString().Length;
+
+                string rightStr = squareStr.Substring(squareStr.Length - d);
+                string leftStr = squareStr.Substring(0, squareStr.Length - d);
+
+                int right = int.Parse(rightStr);
+                int left = leftStr.Length > 0 ? int.Parse(leftStr) : 0;
+
+                if (left + right == i)
+                {
+                    kaprekarList.Add(i);
+                }
+            }
+
+            if (kaprekarList.Count == 0)
+            {
+                Console.WriteLine("INVALID RANGE");
+            }
+            else
+            {
+                Console.WriteLine(string.Join(" ", kaprekarList));
+            }
+
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Please enter p = ");
+            int p = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter q = ");
+            int q = Convert.ToInt32(Console.ReadLine());
+
+            Deploy.kaprekarNumber(p, q);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
 #endregion
 
 #region Algorithms Medium 1
@@ -3773,6 +3898,271 @@ namespace queenAttack2
     }
 }
 #endif
+
+#if false // Organizing Containers Of Balls (List<List<int>>)
+namespace organizingContainersOfBalls
+{
+    /// <summary> Algprithms Problem
+    /*
+    sắp xếp các "thùng" (containers) chứa nhiều loại "đối tượng" (objects)
+    với mục tiêu xác định xem có thể sắp xếp lại các đối tượng trong các
+    thùng sao cho mỗi thùng chứa chỉ một loại đối tượng nhất định hay không.
+
+    Giả sử có n thùng, mỗi thùng chứa một số lượng nhất định các đối tượng khác nhau. 
+    Cấu trúc dữ liệu được sử dụng để lưu trữ thông tin này là một mảng 2 chiều
+    trong đó mỗi hàng tương ứng với một thùng và mỗi cột tương ứng với 
+    số lượng các đối tượng thuộc loại đó trong thùng.
+
+    [1, 1, 1] // Thùng 0 có 1 đối tượng loại 0, 1 đối tượng loại 1, 1 đối tượng loại 2
+    [2, 2, 2] // Thùng 1 có 2 đối tượng loại 0, 2 đối tượng loại 1, 2 đối tượng loại 2
+    [3, 3, 3] // Thùng 2 có 3 đối tượng loại 0, 3 đối tượng loại 1, 3 đối tượng loại 2
+
+    xác định xem có thể tái tổ chức các đối tượng trong các thùng sao cho mỗi thùng 
+    chỉ chứa một loại đối tượng hay không bằng cách tính tổng số lượng trong mỗi
+    thùng và tính tổng số loại trong mỗi thùng , nếu bằng nhau thì có thể còn 
+    lại thì không thể, in ra có thể hay không thể.
+
+    Sample Input: n = 2 => 1 1
+                           1 1
+    Sample Output: Possible
+    */
+    /// </summary> 
+
+    internal class Deploy
+    {
+        public static string organizingContainersOfBalls(List<List<int>> container )
+        {
+            int n = container.Count;
+
+            // Tổng số lượng trong mỗi thùng
+            int[] containerCapacities = new int[n];
+
+            // Tổng số lượng mỗi loại đối tượng
+            int[] objectTypesCount = new int[n];
+
+            for(int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    containerCapacities[i] += container[i][j];
+                    objectTypesCount[j] += container[i][j];
+                }
+            }
+
+            Array.Sort(containerCapacities);
+            Array.Sort(objectTypesCount);
+
+            return containerCapacities.SequenceEqual(objectTypesCount) ?
+                                                       "Possible" : "Impossible";         
+
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            List<List<int>> container = new List<List<int>>();
+
+            Console.Write("Please enter nRow = ");
+            int nRow = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Please enter nCol = ");
+            int nCol = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0;i < nRow; i++)
+            {
+                List<int> row = new List<int>();
+                for (int j = 0;j < nCol; j++)
+                {
+                    Console.Write($"Please enter container[{i}][{j}]: ");
+                    row.Add(Convert.ToInt32(Console.ReadLine()));
+                }
+                container.Add(row);
+            }
+
+            string result = Deploy.organizingContainersOfBalls(container);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Encryption (string)
+namespace encryption
+{
+    /// <summary> Algprithms Problem
+    /*
+    mã hóa một chuỗi văn bản đầu vào s theo một quy trình đặc biệt.
+
+    Loại bỏ khoảng trắng khỏi chuỗi đầu vào s.
+    Xác định kích thước của "lưới":
+     - Tính số hàng (rows) và số cột (cols) sao cho:
+      + rows và cols gần với căn bậc hai của độ dài chuỗi s.
+      + Đảm bảo rows * cols lớn hơn hoặc bằng độ dài của chuỗi (để chứa đủ các ký tự).
+     - Sắp xếp chuỗi vào "lưới" và mã hóa theo cột:
+      + Hãy tưởng tượng chuỗi được sắp vào một bảng với rows hàng và cols cột.
+      + Đọc các ký tự theo cột (thay vì đọc theo hàng) để tạo thành các chuỗi nhỏ, 
+        sau đó nối chúng lại với nhau, cách nhau bởi dấu cách.
+
+    Ví dụ cụ thể: Nếu s = "have a nice day":
+    Bước 1: Loại bỏ khoảng trắng ⇒ s = "haveaniceday".
+    Bước 2: Tính rows = 3, cols = 4 (gần với căn 12)
+    Bước 3: Sắp xếp các ký tự vào "lưới": 
+                                                h a v e
+                                                a n i c
+                                                e d a y
+
+    Bước 4: Đọc theo cột:​
+    Cột 1: h a e ⇒ "hae"
+    Cột 2: a n d ⇒ "and"
+    Cột 3: v i a ⇒ "via"
+    Cột 4: e c y ⇒ "ecy"
+
+    Kết quả: "hae and via ecy"
+
+    Sample Input: chillout
+    Sample Output: clu hlt io
+    */
+    /// </summary> 
+
+    internal class Deploy
+    {
+        public static string encryption(string s)
+        {
+            // Loại bỏ tất cả khoảng trắng trong chuỗi s
+            s = s.Replace(" ", "");
+
+            // Tính độ dài của chuỗi đã loại bỏ khoảng trắng
+            int L = s.Length;
+
+            // Tính số hàng và số cột cho lưới
+            int rows = (int)Math.Floor(Math.Sqrt(L));
+            int cols = (int)Math.Ceiling(Math.Sqrt(L));
+
+            // Kiểm tra nếu rows * cols nhỏ hơn L, tăng thêm số hàng để đủ chỗ chứa
+            if (rows * cols < L)
+            {
+                rows++;
+            }
+
+            StringBuilder result = new StringBuilder();
+
+            for (int i = 0; i < cols; i++)
+            {
+                for (int j = i; j < L ; j += cols)
+                {
+                    result.Append(s[j]);
+                }
+                result.Append(" ");
+            }
+
+            return result.ToString().Trim();
+                     
+
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Please enter s: ");
+            string s = Console.ReadLine();
+
+            string result = Deploy.encryption(s);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Bigger is Greater
+namespace biggerIsGreater
+{
+    /// <summary> Algprithms Problem
+    /*
+    Tìm từ lớn hơn kế tiếp theo thứ tự từ điển từ một chuỗi cho trước.
+     - Chuỗi từ điển: Là cách sắp xếp các từ theo thứ tự như trong từ điển 
+    (ví dụ: "abc", "abd", "acb",...).
+     - Từ lớn hơn kế tiếp: Là từ ngay sau từ hiện tại khi xếp theo thứ tự từ điển.
+
+    Ví dụ từ "abdc": Từ lớn hơn ngay sau "abdc" là "acbd".
+   
+    Tìm ra từ lớn hơn ngay sau từ hiện tại, với số lần thay đổi ít nhất.
+    Nếu từ cho trước đã là lớn nhất có thể, trả về "no answer".
+
+    Ví dụ minh họa: từ "abc"
+    Các từ có thể tạo từ "abc" là: "abc", "acb", "bac", "bca", "cab", "cba"
+    Xếp các từ này theo thứ tự từ điển: "abc", "acb", "bac", "bca", "cab", "cba"
+    Từ ngay sau "abc" là "acb" in ra acb.
+
+    Sample Input: dkhc
+    Sample Output: hcdk
+    */
+    /// </summary> 
+
+    internal class Deploy
+    {
+        public static string biggerIsGreater(string w)
+        {
+            // Chuyển chuỗi thành một mảng ký tự [a, b, d, c]
+            char[] chars = w.ToCharArray();
+
+            int i = chars.Length - 2;
+            while (i >= 0 && chars[i] >= chars[i + 1])
+            {
+                i--; 
+            }
+
+            if (i == -1) // nếu k có giá trị trong w thỏa mản điều kiện
+            {
+                return "no answer";
+            }
+
+            int j = chars.Length - 1;
+            while (chars[j] <= chars[i])
+            {
+                j--;
+            }
+
+            // [a, c, d, b]
+            Swap(chars, i, j);
+
+            // [a, c, b, d]
+            Array.Reverse(chars, i + 1, chars.Length - i - 1);
+
+            // [acbd]
+            return new string(chars);
+        }
+
+        private static void Swap(char[] chars, int i, int j)
+        {
+            char temp = chars[i];
+            chars[i] = chars[j];
+            chars[j] = temp;
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Please enter w: ");
+            string w = Console.ReadLine();
+
+            var result = Deploy.biggerIsGreater(w);
+            Console.WriteLine(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
 
 #endregion
 
@@ -5045,6 +5435,408 @@ namespace insertingANodeIntoASortedDoublyLinkedList
     }
 }
 #endif
+
+#if false // Reverse a doubly Linked List
+namespace reverseADoublyLinkedList
+{
+    /// <summary> Data Structures
+    /*
+    Đảo ngược Doubly Linked List
+
+    Sample Input: nNode = 4 => null <- 1 <-> 2 <-> 3 <-> 4 -> null           
+    Sample Output: null <- 4 <-> 3 <-> 2 <-> 1 -> null
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static DoublyLinkedListNode reverse(DoublyLinkedListNode llist)
+        {
+            DoublyLinkedListNode current = llist;
+            DoublyLinkedListNode temp = null; 
+
+            while (current != null)
+            {
+                // Hoán đổi con trỏ next và prev
+                temp = current.prev;
+                current.prev = current.next;
+                current.next = temp;
+
+                // Di chuyển đến nút trước đó
+                current = current.prev;
+            }
+
+            if (temp != null)
+            {
+                llist = temp.prev;
+            }
+
+            return llist;
+          
+            
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            DoublyLinkedList linkedList = new DoublyLinkedList();
+            Console.Write("Please enter nNode = ");
+            int nNode = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < nNode; i++)
+            {
+                Console.Write($"Please enter Node Data {i}: ");
+                int NodeData = Convert.ToInt32(Console.ReadLine());
+                linkedList.InsertNode(NodeData);
+            }
+
+            DoublyLinkedListNode result = Deploy.reverse(linkedList.head);
+            DoublyLinkedList.PrintDoublyLinkedList(result, "<->");
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+
+
+#endregion
+
+#region Data Structures Easy 3
+
+#if false // Tree: Preirder Traversal (đệ quy)
+namespace TreePreirderTraversal
+{
+    /// <summary> Data Structures
+    /*
+    Preorder Traversal là phương pháp duyệt cây mà trong đó mỗi nút được xử lý
+    trước các nút con của nó.
+    1.Xử lý nút hiện tại (Root)
+    2.Duyệt cây con bên trái
+    3.Duyệt cây con bên phải
+
+    Sample Input:
+                         1
+                          \
+                           2
+                            \
+                             5
+                            /  \
+                           3    6
+                            \
+                             4  
+
+    Sample Output: 1 2 5 3 4 6 
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static void PreorderTraversal(Node root)
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            // Xử lý nút hiện tại
+            Console.Write(root.data + " ");
+
+            // Duyệt cây con bên trái
+            PreorderTraversal(root.left);
+
+            // Duyệt cây con bên phải
+            PreorderTraversal(root.right);
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Node result = Node.CreateBinaryTree();
+
+            Deploy.PreorderTraversal(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Tree: Preirder Traversal (Stack)
+namespace TreePreirderTraversal
+{
+    /// <summary> Data Structures
+    /*
+    Preorder Traversal là phương pháp duyệt cây mà trong đó mỗi nút được xử lý
+    trước các nút con của nó.
+    1.Xử lý nút hiện tại (Root)
+    2.Duyệt cây con bên trái
+    3.Duyệt cây con bên phải
+
+    Sample Input:
+                         1
+                          \
+                           2
+                            \
+                             5
+                            /  \
+                           3    6
+                            \
+                             4  
+
+    Sample Output: 1 2 5 3 4 6 
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static void PreorderTraversal(Node root)
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            Stack<Node> stack = new Stack<Node>();
+            stack.Push(root);
+
+            while(stack.Count > 0)
+            {
+                Node current = stack.Pop();
+
+                Console.Write(current.data + " ");
+
+                if (current.right != null)
+                {
+                    stack.Push(current.right);
+                }
+
+                if (current.left != null)
+                {
+                    stack.Push(current.left);
+                }
+            }
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            var result = Node.CreateBinaryTree();
+
+            Deploy.PreorderTraversal(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Tree: Postorder Traversal (đệ quy)
+namespace TreePostorderTraversal
+{
+    /// <summary> Data Structures
+    /*
+    Postorder Traversal là phương pháp duyệt cây mà trong đó mỗi nút được xử lý
+    từ dưới lên trên, cuối cùng là nút root.
+    1.Duyệt cây con bên trái
+    2.Duyệt cây con bên phải
+    3.Xử lý nút hiện tại (Root)
+
+    Sample Input:
+                         1
+                          \
+                           2
+                            \
+                             5
+                            /  \
+                           3    6
+                            \
+                             4  
+
+    Sample Output: 4 3 6 5 2 1 
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static void PostorderTraversal(Node root)
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            // Duyệt cây con bên trái
+            PostorderTraversal(root.left);
+
+            // Duyệt cây con bên phải
+            PostorderTraversal(root.right);
+
+            // Xử lý nút hiện tại
+            Console.Write(root.data + " ");
+        }
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            Node result = Node.CreateBinaryTree();
+
+            Deploy.PostorderTraversal(result);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+#if false // Tree: Postorder Traversal (Stack)
+namespace TreePostorderTraversal
+{
+    /// <summary> Data Structures
+    /*
+    Postorder Traversal là phương pháp duyệt cây mà trong đó mỗi nút được xử lý
+    từ dưới lên trên, cuối cùng là nút root.
+    1.Duyệt cây con bên trái
+    2.Duyệt cây con bên phải
+    3.Xử lý nút hiện tại (Root)
+
+    Sample Input:
+                         1
+                          \
+                           2
+                            \
+                             5
+                            /  \
+                           3    6
+                            \
+                             4  
+
+    Sample Output: 4 3 6 5 2 1  
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static IList<int> PostorderTraversal(Node root)
+        {
+            List<int> result = new List<int>();
+            
+            if (root == null)
+            {
+                return result;
+            }
+
+            Stack<Node> stack = new Stack<Node>();
+            Node lastVisited = null;
+
+            while(stack.Count > 0 || root != null)
+            {
+                while(root != null)
+                {
+                    stack.Push(root);
+                    root = root.left;
+                }
+
+                Node currentNode = stack.Peek();
+
+                if (currentNode.right == null || currentNode.right == lastVisited)
+                {
+                    result.Add(currentNode.data);
+                    stack.Pop();
+                    lastVisited = currentNode;
+                }
+                else
+                {
+                    root = currentNode.right;
+                }
+            }
+
+            return result;
+        }
+
+        
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            var root = Node.CreateBinaryTree();
+
+            var result = Deploy.PostorderTraversal(root);
+            Console.WriteLine(string.Join(" ", result));
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+
+#if false // Tree: Inorder Traversal
+namespace TreeInorderTraversal
+{
+    /// <summary> Data Structures
+    /*
+    Duyệt theo thứ tự in-order nghĩa là bạn sẽ truy cập nút con trái, sau đó là 
+    nút gốc, và cuối cùng là nút con phải.
+
+    Sample Input:
+                         1
+                          \
+                           2
+                            \
+                             5
+                            /  \
+                           3    6
+                            \
+                             4  
+
+    Sample Output: 1 2 3 4 5 6  
+    */
+    /// </summary>
+
+    internal class Deploy
+    {
+        public static void InorderTraversal(Node root)
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            InorderTraversal(root.left);
+            Console.Write(root.data + " ");
+            InorderTraversal(root.right);
+        }
+
+        
+    }
+
+    internal class Problem
+    {
+        static void Main(string[] args)
+        {
+            var root = Node.CreateBinaryTree();
+
+            Deploy.InorderTraversal(root);
+
+            Console.ReadLine();
+        }
+    }
+}
+#endif
+
+
 
 #endregion
 
